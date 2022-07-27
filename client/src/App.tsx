@@ -6,9 +6,9 @@ import {
   Routes,
   Route,
 } from "react-router-dom";
-import Home from './pages/Home'
-import About from './pages/About';
-import Users from './pages/Users';
+import Home from './components/Home'
+import About from './components/About';
+import Users from './components/Users';
 
 function App() {
   return (
@@ -18,8 +18,8 @@ function App() {
             <Route path='/' element={<Home></Home>}></Route>
             <Route path='/about' element={<About></About>}></Route>
             <Route path='/users'>
-              <Route index element={<Users></Users>}></Route>
-              <Route path=':username' element={<Users></Users>}></Route>
+              <Route index element={<Users user_id={5}></Users>}></Route>
+              <Route path=':username' element={<Users user_id={5}></Users>}></Route>
             </Route>
           </Routes>
       </BrowserRouter>

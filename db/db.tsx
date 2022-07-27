@@ -10,7 +10,7 @@ if (process.env.NODE_ENV === 'production') {
   })
 } else {
   db = new pg.Pool({
-    database: 'my_local_database_name',
-    password: 'optional_password' // If you have a password on your local db
+    database: 'deals',
+    // password: 'optional_password' // If you have a password on your local db
   })
 }
