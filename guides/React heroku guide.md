@@ -84,3 +84,11 @@ Add this to the _server_ `package.json`
     "heroku-postbuild": "cd client && yarn && yarn build"
   },
 ```
+NOTE!!! Joash: using npm so updated this scripts to the below
+
+```
+  "scripts": {
+    "start": "node server.js",
+    "heroku-postbuild": "cd client && npm && yarn build"
+  },
+```
