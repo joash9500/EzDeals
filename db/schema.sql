@@ -1,4 +1,7 @@
-CREATE DATABASE deals;
+-- CREATE DATABASE deals;
+-- cd deals
+-- psql deals < schema.sql
+-- then do the following:
 DROP TABLE IF EXISTS users CASCADE;
 DROP TABLE IF EXISTS deals CASCADE;
 DROP TABLE IF EXISTS deals_status CASCADE;
