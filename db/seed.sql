@@ -7,7 +7,7 @@ VALUES (
     'John',
     'Doe',
     'johndoe@gmail.com',
-    'password',
+    '$2b$10$IIqpjkJJnfbmgDtbxGE7SupeX8NlfnMYZ.OcMlaeVpcqw5bSs8gH2',
     CURRENT_TIMESTAMP
 );
 
@@ -16,7 +16,7 @@ VALUES (
     'Sam',
     'Antha',
     'samantha@gmail.com',
-    'password',
+    '$2b$10$IIqpjkJJnfbmgDtbxGE7SupeX8NlfnMYZ.OcMlaeVpcqw5bSs8gH2',
     CURRENT_TIMESTAMP
 );
 
@@ -25,7 +25,7 @@ VALUES (
     'Lucas',
     'Lee',
     'lucaslee@gmail.com',
-    'password',
+    '$2b$10$IIqpjkJJnfbmgDtbxGE7SupeX8NlfnMYZ.OcMlaeVpcqw5bSs8gH2',
     CURRENT_TIMESTAMP
 );
 

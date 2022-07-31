@@ -5,7 +5,7 @@ const db = require('../db/db')
 //initiate router
 const router = express.Router()
 
-router.get('/api/listings', (req, res) => {
+router.get('/', (req, res) => {
     const sql = 'SELECT * FROM deals'
     db.query(sql).then((db_res) => {
         res.json(db_res.rows)

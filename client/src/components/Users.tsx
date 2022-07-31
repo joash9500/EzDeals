@@ -1,7 +1,7 @@
 import {useParams} from 'react-router-dom'
 import {useEffect, useState} from 'react'
 
-function Users(prop: {user_id: number}) {
+export function Users(prop: {user_id: number}) {
 
     const [msg, setMsg] = useState('');
     const {username} = useParams();
@@ -24,4 +24,6 @@ function Users(prop: {user_id: number}) {
     )
 }
 
-export default Users
+export function Signup() {
+
+}

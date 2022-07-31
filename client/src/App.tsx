@@ -3,8 +3,10 @@ import './App.css';
 
 import Home from './components/Home'
 import About from './components/About';
-import Users from './components/Users';
 import Navbar from './components/Navbar';
+import {Users} from './components/Users';
+import {Login} from './components/Login';
+import Signup from './components/Signup';
 
 // npm install react-router-dom
 import {
@@ -19,6 +21,8 @@ function App() {
       <Routes>
         <Route path='/' element={<Home></Home>}></Route>
         <Route path='/about' element={<About></About>}></Route>
+        <Route path="/login" element={<Login></Login>}></Route>
+        <Route path="/signup" element={<Signup></Signup>}></Route>
         <Route path='/users'>
           <Route index element={<Users user_id={5}></Users>}></Route>
           <Route path=':username' element={<Users user_id={5}></Users>}></Route>
