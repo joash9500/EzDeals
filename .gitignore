@@ -94,3 +94,6 @@ node_modules
 
 #guides
 guides
+
+#ignore .env
+.env

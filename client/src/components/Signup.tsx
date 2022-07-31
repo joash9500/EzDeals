@@ -27,8 +27,11 @@ function Signup() {
         event.preventDefault()
 
         axios.post('/api/users', newUserData).then((res) => {
-          //after sign up, redirect to home page
-          setSubmit(true)
+            //after sign up, redirect to home page
+            setSubmit(true)
+            //log user in after signup, and set session cookies
+            axios.post('/api/sessions', {email: Email, password: Password}).then((res) => console.log('new user logged in', res))
+
         }).catch((err) => {
             console.log(err.response.data.message)
             const status = err.response.status
@@ -42,6 +45,7 @@ function Signup() {
 
      return (
         <div>
+            {/* redirect to home page */}
             {Submit ? <Navigate to="/"/> : null}
             <h1>Sign Up!</h1>
             <form onSubmit={handleSubmit}>

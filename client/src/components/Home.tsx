@@ -13,7 +13,6 @@ function Home() {
             for (const listing of listingData) {
                 setDealList(prevList => [listing, ...prevList])
             }
-            console.log('something')
         })
     }, [])
 
