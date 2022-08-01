@@ -21,7 +21,7 @@ router.post('/', (req, res) => {
     let pw_hash = generateHash(req.body.password)
     //date joined will use PSQL CURRENT TIMESTAMP
 
-    const sql = 'INSERT INTO users (first_name, last_name, email, password_hash, date_joined) VALUES ($1, $2, $3, $4, CURRENT_TIMESTAMP)'
+    const sql = 'INSERT INTO users (first_name, last_name, email, password_hash, date_joined) VALUES ($1, $2, $3, $4, CURRENT_DATE)'
 
     if (!first_name || !last_name || !email || !pw_hash) {
         res.status(400).json({msg: 'incomplete fields'})

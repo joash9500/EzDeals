@@ -8,7 +8,7 @@ VALUES (
     'Doe',
     'johndoe@gmail.com',
     '$2b$10$IIqpjkJJnfbmgDtbxGE7SupeX8NlfnMYZ.OcMlaeVpcqw5bSs8gH2',
-    CURRENT_TIMESTAMP
+    CURRENT_DATE
 );
 
 INSERT INTO users (first_name, last_name, email, password_hash, date_joined) 
@@ -17,7 +17,7 @@ VALUES (
     'Antha',
     'samantha@gmail.com',
     '$2b$10$IIqpjkJJnfbmgDtbxGE7SupeX8NlfnMYZ.OcMlaeVpcqw5bSs8gH2',
-    CURRENT_TIMESTAMP
+    CURRENT_DATE
 );
 
 INSERT INTO users (first_name, last_name, email, password_hash, date_joined) 
@@ -26,7 +26,7 @@ VALUES (
     'Lee',
     'lucaslee@gmail.com',
     '$2b$10$IIqpjkJJnfbmgDtbxGE7SupeX8NlfnMYZ.OcMlaeVpcqw5bSs8gH2',
-    CURRENT_TIMESTAMP
+    CURRENT_DATE
 );
 
 -- dummy postings 
@@ -37,8 +37,8 @@ VALUES (
     'NIKE',
     120,
     200,
-    CURRENT_TIMESTAMP,
-    timestamp '2023-01-01 00:00:00',
+    CURRENT_DATE,
+    date '2023-01-01',
     'online',
     1
 );
@@ -49,8 +49,8 @@ VALUES (
     'The Iconic',
     200,
     200,
-    CURRENT_TIMESTAMP,
-    timestamp '2023-01-01 00:00:00',
+    CURRENT_DATE,
+    date '2023-01-01',
     'online',
     1
 );
@@ -61,8 +61,8 @@ VALUES (
     'North Face',
     350,
     350,
-    CURRENT_TIMESTAMP,
-    timestamp '2023-01-01 00:00:00',
+    CURRENT_DATE,
+    date '2022-08-2',
     'online',
     1
 );
@@ -82,6 +82,6 @@ VALUES (
 INSERT INTO deals_status (deal_id, deal_status) 
 VALUES (
     3,
-    TRUE
+    FALSE
 );
 

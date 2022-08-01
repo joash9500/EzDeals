@@ -50,6 +50,7 @@ function Navbar() {
       <NavLink to="/about" style={({ isActive }) =>
         isActive ? activeStyle : inactiveStyle
       }>About</NavLink>
+      {isLoggedIn ? <NavLink to="/deals/add" style={({ isActive }) => isActive ? activeStyle : inactiveStyle}>Add New</NavLink> : null}
       {isLoggedIn ? null : <NavLink to="/signup" style={({ isActive }) => isActive ? activeStyle : inactiveStyle}>Sign Up</NavLink> }
       {isLoggedIn ? <button onClick={logout}>Logout</button> : <button onClick={login}>Login</button>}
     </div> 

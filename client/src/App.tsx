@@ -7,12 +7,13 @@ import Navbar from './components/Navbar';
 import {Users} from './components/Users';
 import {Login} from './components/Login';
 import Signup from './components/Signup';
-
+import { AddListing } from './components/Deals';
 // npm install react-router-dom
 import {
   Routes,
   Route,
 } from "react-router-dom";
+
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
           <Route index element={<Users user_id={5}></Users>}></Route>
           <Route path=':username' element={<Users user_id={5}></Users>}></Route>
         </Route>
+        <Route path="/deals/add" element={<AddListing></AddListing>}></Route>
       </Routes>
     </div>
   );

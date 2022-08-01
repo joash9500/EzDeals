@@ -54,7 +54,6 @@ function Signup() {
                         <input 
                         type="text" 
                         placeholder="Sam" 
-                        name='first_name' 
                         value={FirstName}
                         onChange={(e) => setFirstName(e.target.value)}
                         ></input>
@@ -64,7 +63,6 @@ function Signup() {
                         <input 
                         type="text" 
                         placeholder="Smith" 
-                        name='last_name'
                         value={LastName}
                         onChange={(e) => setLastName(e.target.value)}
                         ></input>
@@ -74,7 +72,6 @@ function Signup() {
                         <input 
                         type="email" 
                         placeholder="samsmith@example.com" 
-                        name='email'
                         value={Email}
                         onChange={(e) => setEmail(e.target.value)}
                         ></input>
@@ -84,13 +81,12 @@ function Signup() {
                         <input 
                         type="password" 
                         placeholder="Password" 
-                        name='password'
                         value={Password}
                         onChange={(e) => setPassword(e.target.value)}
                         ></input>  
                     </label>    
                     </div>
-                <button type="submit">Sign Up</button>
+                <button type="submit" value="submit">Sign Up</button>
             </form>
 
             <p>{ErrorMsg}</p>
