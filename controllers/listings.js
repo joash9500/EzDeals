@@ -19,8 +19,15 @@ router.get('/active', (req, res) => {
     })
 })
 
-router.post('/:user_id/add', (req, res) => {
+router.post('/active', (req,res) => {
+    const sql = 'INSERT INTO deals_status (deal_id, deal_status) VALUES ($1, $2)'
+    db.query(sql, [req.body.deal_id, 't']).then((db_res) => {
+        res.json({msg: "updated deals_status table", db_res})
+    })
+})
 
+router.post('/:user_id/add', (req, res) => {
+    
     //request data
     const del_name = req.body.deal_name
     const seller = req.body.seller
@@ -32,13 +39,15 @@ router.post('/:user_id/add', (req, res) => {
     //get user id from the request url
     const uid = req.params.user_id
 
-    const sql = 'INSERT INTO deals (deal_name, seller, current_price, original_price, list_date, expire_date, delivery_type, users_id) VALUES ($1, $2, $3, $4, CURRENT_DATE, $5, $6, $7)'
+    //this INSERT will return the id!
+    const sql = 'INSERT INTO deals (deal_name, seller, current_price, original_price, list_date, expire_date, delivery_type, users_id) VALUES ($1, $2, $3, $4, CURRENT_DATE, $5, $6, $7) RETURNING id'
 
-    if (!del_name || !seller || !curr_price || !orig_price || exp_date || deliv_type ) {
+    if (!del_name || !seller || !curr_price || !orig_price || !exp_date || !deliv_type ) {
         res.status(400).json({msg: 'incomplete fields'})
     } else {
         db.query(sql, [del_name, seller, curr_price, orig_price, exp_date, deliv_type, uid]).then((dbRes) => {
-            res.json({msg: 'add listing was successful'})
+            //return the id
+            res.json({msg: 'add listing was successful', db: dbRes.rows[0].id})
         }).catch((err) => {
             res.status(500).json({msg: 'unkown error occured when add new listing', err})
         })

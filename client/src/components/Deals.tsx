@@ -1,5 +1,5 @@
 import axios from "axios"
-import {useState, useEffect} from 'react'
+import React, {useState, useEffect} from 'react'
 
 export function AddListing() {
     //error message
@@ -11,9 +11,9 @@ export function AddListing() {
     const [CurrentPrice, setCurrentPrice] = useState<number>(0)
     const [OriginalPrice, setOriginalPrice] = useState<number>(0)
     // Listing Date is automatically set with the CURRENT_DATE executed in the listing.js (server side)
-    const [ExpireDate, setExpireDate] = useState<string>()
-    //Delivery type is either online or physical. 
-    const [DeliveryType, setDeliveryType] = useState<string>('')
+    const [ExpireDate, setExpireDate] = useState<string>('')
+    //Delivery type is either online or physical. NOTE, we had to initialise a value here e.g. 'online' otherwise its always an empty string ''
+    const [DeliveryType, setDeliveryType] = useState<string>('online')
 
     //store new post listing data into an object
     const newListing = {
@@ -36,13 +36,26 @@ export function AddListing() {
                 setErrorMsg('Not Logged in. Cannot add new listing')
                 return
             } else {
-                //make another request to server and post new listing
+                //get id from session
                 const user_id = currentSession.user_id
-                axios.post(`/api//listings/${user_id}/add`, newListing).then((res) => {
+                //make another request to server and post new listing
+                axios.post(`/api/listings/${user_id}/add`, newListing).then((res) => {
                     console.log("new listing added", res)
+                    //update the deals_status table
+                    const new_deal_id = {
+                        deal_id: res.data.db
+                    }
+                    axios.post('/api/listings/active', new_deal_id).then((res) => {
+                        console.log(res)
+                    })
                 })
+
             }
         })
+    }
+
+    const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        setDeliveryType(event.target.value)
     }
 
     return (
@@ -63,10 +76,11 @@ export function AddListing() {
                 <label>Expire Date:
                     <input type="date" value={ExpireDate} onChange={(e) => setExpireDate(e.target.value)}></input>
                 </label>
+                {/* select options has a different format, so we have to set up a unique function to handle the select event ie handleSelectChange */}
                 <label>Delivery Type:
-                    <select value={DeliveryType} onChange={(e) => setDeliveryType(e.target.value)}>
+                    <select value={DeliveryType} onChange={handleSelectChange}>
                         <option value="online">Online</option>
-                        <option value="physical">In-person</option>
+                        <option value="physical">Physical</option>
                     </select>
                 </label>
                 <button type="submit" value="Submit">Add Listing</button>
