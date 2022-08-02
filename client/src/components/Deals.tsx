@@ -36,7 +36,7 @@ export function Listings() {
     return (
         <div>
             <h1>Home</h1>
-            <Grid container spacing={4} alignItems="center" justifyContent="center">
+            <Grid container spacing={4} alignItems="center" justifyContent="center" padding="20px">
 
                 {dealList.map((listObj, index) => {
                     const name = listObj.deal_name
@@ -76,92 +76,4 @@ export function Listings() {
            
         </div>
     ) 
-}
-
-export function AddListing() {
-    //error message
-    const [ErrorMsg, setErrorMsg] = useState<string>('')
-
-    //inputs for add listing form
-    const [DealName, setDealName] = useState<string>('')
-    const [Seller, setSeller] = useState<string>('')
-    const [CurrentPrice, setCurrentPrice] = useState<number>(0)
-    const [OriginalPrice, setOriginalPrice] = useState<number>(0)
-    // Listing Date is automatically set with the CURRENT_DATE executed in the listing.js (server side)
-    const [ExpireDate, setExpireDate] = useState<string>('')
-    //Delivery type is either online or physical. NOTE, we had to initialise a value here e.g. 'online' otherwise its always an empty string ''
-    const [DeliveryType, setDeliveryType] = useState<string>('online')
-
-    //store new post listing data into an object
-    const newListing = {
-        deal_name: DealName,
-        seller: Seller,
-        current_price: CurrentPrice,
-        original_price: OriginalPrice,
-        expire_date: ExpireDate,
-        delivery_type: DeliveryType
-    }
-
-    //form handler
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-        //prevent page reload on submit form
-        event.preventDefault()
-
-        axios.get('/api/sessions').then((res) => {
-            const currentSession = res.data.sessionData
-            if (currentSession.user_id == undefined) {
-                setErrorMsg('Not Logged in. Cannot add new listing')
-                return
-            } else {
-                //get id from session
-                const user_id = currentSession.user_id
-                //make another request to server and post new listing
-                axios.post(`/api/listings/${user_id}/add`, newListing).then((res) => {
-                    console.log("new listing added", res)
-                    //update the deals_status table
-                    const new_deal_id = {
-                        deal_id: res.data.db
-                    }
-                    axios.post('/api/listings/active', new_deal_id).then((res) => {
-                        console.log(res)
-                    })
-                })
-            }
-        })
-    }
-
-    const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        setDeliveryType(event.target.value)
-    }
-
-    return (
-        <div>
-            <h1>Add New Deal</h1>
-            <form onSubmit={handleSubmit}>
-                <label>Title:
-                    <input type="text" value={DealName} onChange={(e) => setDealName(e.target.value)}></input>
-                </label>
-                <label>Seller:
-                    <input type="text" value={Seller} onChange={(e) => setSeller(e.target.value)}></input>
-                </label>
-                <label>Current Price:
-                    <input type="number" value={CurrentPrice} onChange={(e) => setCurrentPrice(e.target.valueAsNumber)}></input>
-                </label>
-                <label>Original Price:
-                    <input type="number" value={OriginalPrice} onChange={(e) => setOriginalPrice(e.target.valueAsNumber)}></input>
-                </label>
-                <label>Expire Date:
-                    <input type="date" value={ExpireDate} onChange={(e) => setExpireDate(e.target.value)}></input>
-                </label>
-                {/* select options has a different format, so we have to set up a unique function to handle the select event ie handleSelectChange */}
-                <label>Delivery Type:
-                    <select value={DeliveryType} onChange={handleSelectChange}>
-                        <option value="online">Online</option>
-                        <option value="physical">Physical</option>
-                    </select>
-                </label>
-                <button type="submit" value="Submit">Add Listing</button>
-            </form>
-        </div>
-    )
 }

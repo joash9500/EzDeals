@@ -7,13 +7,12 @@ import Navbar from './components/Navbar';
 import {Users} from './components/Users';
 import {Login} from './components/Login';
 import Signup from './components/Signup';
-import { AddListing } from './components/Deals';
+import { AddListing } from './components/AddDeals';
 // npm install react-router-dom
 import {
   Routes,
   Route,
 } from "react-router-dom";
-
 
 function App() {
   return (

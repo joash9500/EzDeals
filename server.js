@@ -8,8 +8,7 @@ const pgSession = require('connect-pg-simple')(expressSession);
 //SETUP for database
 const db = require('./db/db')
 const app = express();
-
-//need this app.use in order to access requests in json format within the routers
+//need this app.use in order to access requests in json format within the express routers
 app.use(express.json())
 
 //set up sessions and cookies. note this needs to be written here BEFORE using it in app.use('/api/sesions'). Javascript reads from top to bottom...
@@ -25,12 +24,15 @@ app.use(expressSession({
 const listingsRouter = require('./controllers/listings')
 const sessionsRouter = require('./controllers/sessions')
 const usersRouter = require('./controllers/users')
+const imagesRouter = require('./controllers/images')
 
 //use routers
 app.use('/api/listings', listingsRouter)
 app.use('/api/sessions', sessionsRouter)
 app.use('/api/users', usersRouter)
+app.use('/api/images', imagesRouter)
 
+//need to call app.use build folder to enable react to be translated to readeable javascript for the browser
 app.use(express.static("./client/build"));
 
 //middleware logger
@@ -38,14 +40,6 @@ app.use((req, res, next) => {
   console.log(`I am middleware! Request ${req.path}`)
   next()
 })
-
-app.get('/', (req, res) => {
-  res.json({msg: 'hello!'})
-})
-
-app.get("/api/test", (req, res) => {
-  res.json({ result: "success" });
-});
 
 //middleware
 app.use((err, req, res, next) => {
