@@ -15,7 +15,7 @@ export function AddListing() {
     //Delivery type is either online or physical. NOTE, we had to initialise a value here e.g. 'online' otherwise its always an empty string ''
     const [DeliveryType, setDeliveryType] = useState<string>('online')
     //For image uploads, which will eventually go into the AMAZON s3 cloud server (NOT psql database). NOTE defined the type as a FILE or null (ie. nothing)
-    const [ImageFile, setImageFile] = useState<File | null >(null)
+    const [ImageFile, setImageFile] = useState<Blob | string>('')
 
     //store new post listing data into an object
     const newListing = {
@@ -50,8 +50,17 @@ export function AddListing() {
                     axios.post('/api/listings/active', new_deal_id).then((res) => {
                         console.log(res)
                     })
-
-                    
+                    //get image file from form. First, check if ImageFile is undefined otherwise post to /api/images
+                    if (ImageFile) {
+                        const formData = new FormData()
+                        formData.append("image", ImageFile)
+                        //send deal_id with the image (so we know which deal this image references)
+                        formData.append("deal_id", new_deal_id.deal_id)
+                        //send image from formdata to server
+                        axios.post('/api/images', formData, {
+                            headers: {'Content-Type': 'multipart/form-data'}
+                        })
+                    }
                 })
             }
         })
@@ -64,9 +73,7 @@ export function AddListing() {
 
     const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
         //handle null case
-        if (!event.target.files) {
-            return 
-        } else {
+        if (event.target.files) {
             setImageFile(event.target.files[0])
         }
     }
@@ -98,7 +105,8 @@ export function AddListing() {
                     </select>
                 </label>
                 <label>Image Upload:
-                    <input type="file" name="image" accept=".png, .jpg, .jpeg" onChange={handleImageUpload}></input>
+                    <input type="file" name="image" accept=".png, .jpg, .jpeg" 
+                        onChange={handleImageUpload}></input>
                 </label>
                 <button type="submit" value="Submit">Add Listing</button>
             </form>

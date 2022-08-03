@@ -1,5 +1,6 @@
 import axios from "axios"
 import React, {useState, useEffect} from 'react'
+import { useNavigate } from "react-router-dom";
 
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -20,6 +21,8 @@ import { CardActionArea, Grid, makeStyles } from '@mui/material';
 
 export function Listings() {
 
+    const navigate = useNavigate()
+
     //set up functional states
     const [dealList, setDealList] = useState<any[]>([])
 
@@ -32,6 +35,13 @@ export function Listings() {
             }
         })
     }, [])
+
+    const handleRedirect = (data: object) => {
+        console.log('clicked', data)
+        navigate('/listing/item', {state: {
+            state_data: data
+        }})
+    }
     
     return (
         <div>
@@ -39,16 +49,19 @@ export function Listings() {
             <Grid container spacing={4} alignItems="center" justifyContent="center" padding="20px">
 
                 {dealList.map((listObj, index) => {
-                    const name = listObj.deal_name
-                    const seller = listObj.seller
-                    const curr_price = listObj.current_price
-                    const list_date = listObj.list_date
-                    const exp_date = listObj.expire_date
+
+                    const cardData = {
+                        name: listObj.deal_name,
+                        seller: listObj.seller,
+                        curr_price: listObj.current_price,
+                        list_date: listObj.list_date,
+                        exp_date: listObj.expire_date,
+                    }
 
                     return (
                     <Grid item xs={12} sm={6} md={4} key={index}>
                         <Card sx={{ minWidth: 200 }}>
-                            <CardActionArea>
+                            <CardActionArea onClick={() => handleRedirect(cardData)}>
                             <CardMedia
                                 component="img"
                                 height="140"
@@ -57,13 +70,13 @@ export function Listings() {
                             />
                             <CardContent>
                                 <Typography gutterBottom variant="h5" component="div">
-                                {name}
+                                {cardData.name}
                                 </Typography>
                                 <Typography variant="body2" color="text.secondary">
-                                Seller: {seller} 
-                                Current Price: {curr_price} 
-                                Date Listed: {list_date} 
-                                Expiry: {exp_date} 
+                                Seller: {cardData.seller} 
+                                Current Price: {cardData.curr_price} 
+                                Date Listed: {cardData.list_date} 
+                                Expiry: {cardData.exp_date} 
                                 </Typography>
                             </CardContent>
                             </CardActionArea>

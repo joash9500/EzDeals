@@ -13,6 +13,7 @@ import {
   Routes,
   Route,
 } from "react-router-dom";
+import ListingItem from './components/ListingItem';
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
           <Route path=':username' element={<Users user_id={5}></Users>}></Route>
         </Route>
         <Route path="/deals/add" element={<AddListing></AddListing>}></Route>
+        <Route path="/listing/item" element={<ListingItem></ListingItem>}></Route>
       </Routes>
     </div>
   );
