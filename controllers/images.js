@@ -6,7 +6,8 @@ const express = require('express')
 const multer = require('multer')
 // this imports a bare-bones version of S3 that exposes the .send operation
 const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
-const crypto = require('crypto')
+const crypto = require('crypto');
+const db = require('../db/db');
 require('dotenv').config()
 
 //encrypt the image file name. need this as image files with same name will overwrite each other when posted to amazon s3
@@ -53,9 +54,13 @@ router.post('/', upload.single('image'), async (req, res) => {
     await s3.send(command)
 
     //save the image file into database, after its been served to the AMAZON s3 cloud server
-    router.post('/')
+    const deal_id = req.body.deal_id
+    
+    const sql = 'UPDATE deals SET image_name = $1 WHERE id = $2'
+    db.query(sql, [imageName, deal_id]).then((dbRes) => {
+        res.json({msg: 'image uploaded to amazon s3 ga-project4 and updated image name' + imageName + 'for ' + deal_id + ' in psql database', dbRes})
+    })
 
-    res.json({msg: 'image uploaded to amazon s3 ga-project4'})
 })
 
 module.exports = router

@@ -25,12 +25,14 @@ const listingsRouter = require('./controllers/listings')
 const sessionsRouter = require('./controllers/sessions')
 const usersRouter = require('./controllers/users')
 const imagesRouter = require('./controllers/images')
+const commentsRouter = require('./controllers/comments')
 
 //use routers
 app.use('/api/listings', listingsRouter)
 app.use('/api/sessions', sessionsRouter)
 app.use('/api/users', usersRouter)
 app.use('/api/images', imagesRouter)
+app.use('/api/comments', commentsRouter)
 
 //need to call app.use build folder to enable react to be translated to readeable javascript for the browser
 app.use(express.static("./client/build"));

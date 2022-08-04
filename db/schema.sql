@@ -26,6 +26,7 @@ CREATE TABLE deals (
     list_date TIMESTAMP,
     expire_date TIMESTAMP,
     delivery_type TEXT,
+    image_name TEXT,
     users_id INT REFERENCES users(id) ON DELETE CASCADE
 );
 
