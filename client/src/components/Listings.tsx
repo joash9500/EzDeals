@@ -8,17 +8,6 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { CardActionArea, Grid, makeStyles } from '@mui/material';
 
-// function ListItem(props:any[]) {
-
-
-
-//     return (
-//         <div>
-
-//         </div>
-//     )
-// }
-
 export function Listings() {
 
     const navigate = useNavigate()

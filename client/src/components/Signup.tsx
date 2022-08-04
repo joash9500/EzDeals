@@ -11,6 +11,7 @@ function Signup() {
     //inputs from sign up form
     const [FirstName, setFirstName] = useState('')
     const [LastName, setLastName] = useState('')
+    const [Username, setUsername] = useState('')
     const [Email, setEmail] = useState('')
     const [Password, setPassword] = useState('')
 
@@ -18,6 +19,7 @@ function Signup() {
     const newUserData = {
         first_name: FirstName,
         last_name: LastName,
+        username: Username,
         email: Email,
         password: Password
     }
@@ -65,6 +67,15 @@ function Signup() {
                         placeholder="Smith" 
                         value={LastName}
                         onChange={(e) => setLastName(e.target.value)}
+                        ></input>
+                    </label>
+                    <br></br>
+                    <label>Username:
+                        <input 
+                        type="text" 
+                        placeholder="Smith1.0" 
+                        value={Username}
+                        onChange={(e) => setUsername(e.target.value)}
                         ></input>
                     </label>
                     <br></br>

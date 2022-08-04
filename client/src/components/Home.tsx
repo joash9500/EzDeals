@@ -1,5 +1,5 @@
 
-import {Listings} from './Deals'
+import {Listings} from './Listings'
 
 function Home() {
     

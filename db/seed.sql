@@ -2,28 +2,31 @@
 
 -- dummy users
 
-INSERT INTO users (first_name, last_name, email, password_hash, date_joined) 
+INSERT INTO users (first_name, last_name, username, email, password_hash, date_joined) 
 VALUES (
     'John',
     'Doe',
+    'JohnDoe',
     'johndoe@gmail.com',
     '$2b$10$IIqpjkJJnfbmgDtbxGE7SupeX8NlfnMYZ.OcMlaeVpcqw5bSs8gH2',
     CURRENT_DATE
 );
 
-INSERT INTO users (first_name, last_name, email, password_hash, date_joined) 
+INSERT INTO users (first_name, last_name, username, email, password_hash, date_joined) 
 VALUES (
     'Sam',
     'Antha',
+    'Samantha',
     'samantha@gmail.com',
     '$2b$10$IIqpjkJJnfbmgDtbxGE7SupeX8NlfnMYZ.OcMlaeVpcqw5bSs8gH2',
     CURRENT_DATE
 );
 
-INSERT INTO users (first_name, last_name, email, password_hash, date_joined) 
+INSERT INTO users (first_name, last_name, username, email, password_hash, date_joined) 
 VALUES (
     'Lucas',
     'Lee',
+    'Lucas1.0',
     'lucaslee@gmail.com',
     '$2b$10$IIqpjkJJnfbmgDtbxGE7SupeX8NlfnMYZ.OcMlaeVpcqw5bSs8gH2',
     CURRENT_DATE
@@ -67,6 +70,33 @@ VALUES (
     1
 );
 
+INSERT INTO comments (body, users_id, parent_id, created, deal_id)
+VALUES (
+    'Hey that looks amazing',
+    1,
+    null,
+    CURRENT_DATE,
+    1
+);
+
+INSERT INTO comments (body, users_id, parent_id, created, deal_id)
+VALUES (
+    'I agree!',
+    2,
+    null,
+    CURRENT_DATE,
+    1
+);
+
+INSERT INTO comments (body, users_id, parent_id, created, deal_id)
+VALUES (
+    'Same it looks fantastic',
+    3,
+    null,
+    CURRENT_DATE,
+    1
+);
+
 INSERT INTO deals_status (deal_id, deal_status) 
 VALUES (
     1,
@@ -84,4 +114,6 @@ VALUES (
     3,
     FALSE
 );
+
+
 

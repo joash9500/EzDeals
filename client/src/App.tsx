@@ -7,7 +7,7 @@ import Navbar from './components/Navbar';
 import {Users} from './components/Users';
 import {Login} from './components/Login';
 import Signup from './components/Signup';
-import { AddListing } from './components/AddDeals';
+import { AddListing } from './components/AddListing';
 // npm install react-router-dom
 import {
   Routes,
