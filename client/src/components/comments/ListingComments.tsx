@@ -25,7 +25,7 @@ function ListingComments() {
             const comments = res.data
             for (const comment of comments) {
                 //update comment list at each iteration
-                setBackendComments(previousComments => [comment, ...previousComments])
+                setBackendComments(previousComments => [...previousComments, comment])
             }
             // console.log(backendComments)
         })
