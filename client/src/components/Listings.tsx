@@ -1,27 +1,65 @@
 import axios from "axios"
-import React, {useState, useEffect} from 'react'
+import {useState, useEffect} from 'react'
 import { useNavigate } from "react-router-dom";
 
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
-import { CardActionArea, Grid, makeStyles } from '@mui/material';
+import { CardActionArea, Grid } from '@mui/material';
+
+interface dealList {
+    id: number,
+    deal_name: string,
+    seller: string,
+    current_price: number,
+    original_price: number,
+    list_date: string,
+    expire_date: string,
+    delivery_type: string,
+    image_name: string,
+    users_id: number,
+    deal_id: number,
+    deal_status: boolean,
+    aws_url: string
+}
+
+interface urlData {
+    url: string
+}
+
+// interface dealId {
+//     deal_id: number
+// }
 
 export function Listings() {
 
     const navigate = useNavigate()
 
     //set up functional states
-    const [dealList, setDealList] = useState<any[]>([])
-
+    const [dealList, setDealList] = useState<dealList[]>([])
     //initial list of deals. once only request hence '[]'
     useEffect(() => {
-        axios.get('/api/listings/active').then((res) => {    
+        axios.get<dealList[]>('/api/listings/active').then((res) => { 
+
             const listingData = res.data
             for (const listing of listingData) {
-                setDealList(prevList => [listing, ...prevList])
+
+                let id = listing.deal_id
+                axios.get<urlData>('/api/images', {
+                    params: {
+                        deal_id: id
+                    }
+                }).then((res) => {
+                    console.log('running api images response', res.data)
+
+                    const url = res.data.url
+                    //update the listing with the aws image url
+                    listing['aws_url'] = url
+                    setDealList(prevList => [listing, ...prevList])
+                })
             }
+
         })
     }, [])
 
@@ -34,7 +72,7 @@ export function Listings() {
     
     return (
         <div>
-            <h1>Home</h1>
+            <h1 className="title">Home</h1>
             <Grid container spacing={4} alignItems="center" justifyContent="center" padding="20px">
 
                 {dealList.map((listObj, index) => {
@@ -54,7 +92,7 @@ export function Listings() {
                             <CardMedia
                                 component="img"
                                 height="140"
-                                image="image.jpg"
+                                image={listObj.aws_url}
                                 alt="random image"
                             />
                             <CardContent>

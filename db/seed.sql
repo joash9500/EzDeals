@@ -2,13 +2,14 @@
 
 -- dummy users
 
+-- password password
 INSERT INTO users (first_name, last_name, username, email, password_hash, date_joined) 
 VALUES (
     'John',
     'Doe',
     'JohnDoe',
     'johndoe@gmail.com',
-    '$2b$10$IIqpjkJJnfbmgDtbxGE7SupeX8NlfnMYZ.OcMlaeVpcqw5bSs8gH2',
+    '$2b$10$QoYskibVWnseDg9gHJEgC.6xqKo/48Ug3MLEQh/4aUhf/3FtHsqWK',
     CURRENT_DATE
 );
 
@@ -34,7 +35,7 @@ VALUES (
 
 -- dummy postings 
 
-INSERT INTO deals (deal_name, seller, current_price, original_price, list_date, expire_date, delivery_type, users_id) 
+INSERT INTO deals (deal_name, seller, current_price, original_price, list_date, expire_date, delivery_type, image_name, users_id) 
 VALUES (
     'Nike Sale',
     'NIKE',
@@ -43,30 +44,33 @@ VALUES (
     CURRENT_DATE,
     date '2023-01-01',
     'online',
+    '7e1bb8aa4cf10589d7a460cfaf8ca874aa45476c9a44c96d42c186b3995625fb',
     1
 );
 
-INSERT INTO deals (deal_name, seller, current_price, original_price, list_date, expire_date, delivery_type, users_id) 
+INSERT INTO deals (deal_name, seller, current_price, original_price, list_date, expire_date, delivery_type, image_name, users_id) 
 VALUES (
     'Tommy Hilfiger Sale',
     'The Iconic',
-    200,
+    100,
     200,
     CURRENT_DATE,
     date '2023-01-01',
     'online',
+    '1eb4b69738772d6fc10e539c2900d839a31fd30a1207096b6b1cbb37a6a694a3',
     1
 );
 
-INSERT INTO deals (deal_name, seller, current_price, original_price, list_date, expire_date, delivery_type, users_id) 
+INSERT INTO deals (deal_name, seller, current_price, original_price, list_date, expire_date, delivery_type, image_name, users_id) 
 VALUES (
-    'North Face Jackets 50% off',
-    'North Face',
-    350,
-    350,
+    'North Face Jackets 40% off',
+    'The North Face',
+    200,
+    400,
     CURRENT_DATE,
     date '2022-08-2',
     'online',
+    '51554b222c4e8b77964f86c28d43ee03a8a0561ea7f1e4a3db7440e74e69ff3a',
     1
 );
 

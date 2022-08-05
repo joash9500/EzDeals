@@ -2,25 +2,21 @@ import { useState, useEffect } from "react"
 import axios from "axios"
 import ListingComment from "./ListingComment";
 
-//set up interface for props to ListingComment
-// interface rootCommentData {
-//     id: number,
-//     body: string,
-//     users_id: number,
-//     parent_id: number | null,
-//     created: string,
-//     deal_id: number,
-//     username: string
-// }
+// set up interface for props to ListingComment
+export interface rootCommentData {
+    id: number,
+    body: string,
+    users_id: number,
+    parent_id: number | null,
+    created: string,
+    deal_id: number,
+    username: string
+}
 
 //props will be the userid
-function ListingComments(props: object) {
+function ListingComments() {
 
     const [backendComments, setBackendComments] = useState<any[]>([])
-    //get parent comments first before rendering child comments, note filter only works on arrays. data from database is are objects
-    const rootComments = backendComments.filter(
-        backendComments => backendComments.parent_id === null
-    ); 
 
     //run once when mounting component
     useEffect(() => {
@@ -30,23 +26,29 @@ function ListingComments(props: object) {
                 //update comment list at each iteration
                 setBackendComments(previousComments => [comment, ...previousComments])
             }
-            console.log(backendComments)
+            // console.log(backendComments)
         })
     }, [])
+
+    //get parent comments first before rendering child comments, note filter only works on arrays. data from database is are objects
+    const rootComments: any[] = backendComments.filter(
+        backendComments => backendComments.parent_id === null
+    ); 
+    // console.log(rootComments)
 
     return (
         <div className="comments">  
             <h4 className="comment-title">Comments:</h4>
-                {/* <div className="comments-container">
-                    {rootComments.map((rootComment: rootCommentData, index) => (
+                <div className="comments-container">
+                    {rootComments.map((rootComment: rootCommentData) => {
                         // <div key={rootComment.id}>{rootComment.body}</div>
-                        <ListingComment key={rootComment.id} comment={rootComment}></ListingComment>
-                    ))}
-                </div> */}
-
-            <p>1st comment test</p>
-            <p>2nd comment test</p>
-
+                        // console.log(rootComment)
+                        return (
+                        <ListingComment key={rootComment.id} {...rootComment}></ListingComment>
+                        )
+                    }
+                    )}
+                </div>
 
         </div>
     )

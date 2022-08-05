@@ -1,9 +1,23 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  align-items: center;
+  font-family: sans-serif;
+}
+
+.navbar {
+  text-align: center;
+}
+
+.navbar > * {
+  margin: 2px;
+}
+
+.title {
+  text-align: center;
+}
+
+.content {
+  color: red;
+  text-align: center;
   justify-content: center;
 }
 
@@ -69,6 +83,7 @@ monsterlessonsacademy, author: Oleksandr Kocherhin
 
 .comment-image-container img {
   border-radius: 50px;
+
 }
 
 .comment-right-part {

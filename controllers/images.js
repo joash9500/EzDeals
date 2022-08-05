@@ -5,7 +5,12 @@ const express = require('express')
 //import does not work in this version of node, so we have to use require 
 const multer = require('multer')
 // this imports a bare-bones version of S3 that exposes the .send operation
-const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
+const { S3Client, PutObjectCommand, GetObjectCommand } = require("@aws-sdk/client-s3");
+//https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/modules/_aws_sdk_s3_request_presigner.html
+const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
+
+
+//random image name generator
 const crypto = require('crypto');
 const db = require('../db/db');
 require('dotenv').config()
@@ -60,6 +65,28 @@ router.post('/', upload.single('image'), async (req, res) => {
     db.query(sql, [imageName, deal_id]).then((dbRes) => {
         res.json({msg: 'image uploaded to amazon s3 ga-project4 and updated image name' + imageName + 'for ' + deal_id + ' in psql database', dbRes})
     })
+
+})
+
+router.get('/', async (req, res) => {
+    // console.log(req.query.deal_id)
+    const deal_id = req.query.deal_id
+    const sql = 'SELECT image_name FROM deals WHERE id = $1'
+    const imageName = await db.query(sql, [deal_id]).catch((err) => {
+        res.json({msg: err})
+    })
+
+    // console.log(imageName.rows[0].image_name)
+    const imageKey = imageName.rows[0].image_name
+
+    const getObjectParams = {
+        Bucket: bucketName,
+        Key: imageKey
+    }
+
+    const command = new GetObjectCommand(getObjectParams);
+    const url = await getSignedUrl(s3, command, { expiresIn: 3600 });
+    res.json({url: url})
 
 })
 

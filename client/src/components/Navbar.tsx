@@ -43,7 +43,7 @@ function Navbar() {
   };
 
   return (
-    <div>
+    <div className='navbar'>
       <NavLink to="/" style={({ isActive }) =>
         isActive ? activeStyle : inactiveStyle
       }>Home</NavLink>
