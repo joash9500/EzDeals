@@ -1,5 +1,6 @@
 import React, {useState} from 'react'
 import axios from "axios"
+import { CardContent, Typography, Card, Grid, TextField, Button } from '@mui/material'
 
 export function AddListing() {
     //error message
@@ -50,6 +51,7 @@ export function AddListing() {
                     axios.post('/api/listings/active', new_deal_id).then((res) => {
                         console.log(res)
                     })
+                    
                     //get image file from form. First, check if ImageFile is undefined otherwise post to /api/images
                     if (ImageFile) {
                         const formData = new FormData()
@@ -80,23 +82,29 @@ export function AddListing() {
 
     return (
         <div data-testid='AddListing'>
-            <h1>Add New Deal</h1>
-            <form onSubmit={handleSubmit}>
+           
+            <h1 className='title'>Add New Deal</h1>
+            <form onSubmit={handleSubmit} className="content">
                 <label>Title:
                     <input type="text" value={DealName} onChange={(e) => setDealName(e.target.value)}></input>
                 </label>
+                <br></br>
                 <label>Seller:
                     <input type="text" value={Seller} onChange={(e) => setSeller(e.target.value)}></input>
                 </label>
+                <br></br>
                 <label>Current Price:
                     <input type="number" value={CurrentPrice} onChange={(e) => setCurrentPrice(e.target.valueAsNumber)}></input>
                 </label>
+                <br></br>
                 <label>Original Price:
                     <input type="number" value={OriginalPrice} onChange={(e) => setOriginalPrice(e.target.valueAsNumber)}></input>
                 </label>
+                <br></br>
                 <label>Expire Date:
                     <input type="date" value={ExpireDate} onChange={(e) => setExpireDate(e.target.value)}></input>
                 </label>
+                <br></br>
                 {/* select options has a different format, so we have to set up a unique function to handle the select event ie handleSelectChange */}
                 <label>Delivery Type:
                     <select value={DeliveryType} onChange={handleSelectChange}>
@@ -104,10 +112,12 @@ export function AddListing() {
                         <option value="physical">Physical</option>
                     </select>
                 </label>
+                <br></br>
                 <label>Image Upload:
                     <input type="file" name="image" accept=".png, .jpg, .jpeg" 
                         onChange={handleImageUpload}></input>
                 </label>
+                <br></br>
                 <button type="submit" value="Submit">Add Listing</button>
             </form>
         </div>

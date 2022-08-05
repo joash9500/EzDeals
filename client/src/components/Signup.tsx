@@ -1,6 +1,7 @@
 import {useState} from 'react'
 import {Navigate} from 'react-router-dom'
 import axios from 'axios'
+import { CardContent, Typography, Card, Grid, TextField, Button } from '@mui/material'
 
 function Signup() {
     //render a specific page if signed up or not signed up
@@ -49,7 +50,40 @@ function Signup() {
         <div>
             {/* redirect to home page */}
             {Submit ? <Navigate to="/"/> : null}
-            <h1>Sign Up!</h1>
+            <Card style={{maxWidth:600, margin: '10vh auto', padding: '20px 5px'}}>
+            <CardContent>
+                    <Typography variant='h5' align='center' margin="10px">Login</Typography>
+                    <form onSubmit={handleSubmit}>
+                    <Grid container spacing={1}>
+                        <Grid xs={12} sm={6} item>
+                            <TextField label="First Name" placeholder="Enter First Name" variant='outlined' fullWidth value={FirstName}  onChange={(e) => setFirstName(e.target.value)}></TextField>
+                        </Grid>
+                        <Grid xs={12} sm={6} item>
+                            <TextField label="Last Name" placeholder="Enter Last Name" variant='outlined' fullWidth value={LastName} onChange={(e) => setLastName(e.target.value)}></TextField>
+                        </Grid>
+                        <Grid xs={12} sm={12} item>
+                            <TextField label="Username" placeholder="Enter Username" variant='outlined' fullWidth value={Username} onChange={(e) => setUsername(e.target.value)}></TextField>
+                        </Grid>
+                        <Grid xs={12} sm={12} item>
+                            <TextField label="Email" placeholder="Enter Email" variant='outlined' fullWidth type="email" value={Email} onChange={(e) => setEmail(e.target.value)}></TextField>
+                        </Grid>
+                        <Grid xs={12} sm={12} item>
+                            <TextField label="Password" placeholder="Enter Password" variant='outlined' fullWidth type="password" value={Password} onChange={(e) => setPassword(e.target.value)}></TextField>
+                        </Grid>
+
+
+                        <Grid xs={12} item>
+                            <Button type="submit" fullWidth variant='contained'>Sign Up</Button>
+                        </Grid>
+                    </Grid>
+                    </form>
+            </CardContent>
+            </Card>
+            
+            <p>{ErrorMsg}</p>
+
+
+            {/* <h1>Sign Up!</h1>
             <form onSubmit={handleSubmit}>
                 <div>
                     <label>First Name:
@@ -98,9 +132,7 @@ function Signup() {
                     </label>    
                     </div>
                 <button type="submit" value="submit">Sign Up</button>
-            </form>
-
-            <p>{ErrorMsg}</p>
+            </form> */}
 
         </div>
      )

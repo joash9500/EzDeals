@@ -1,6 +1,7 @@
 import {useState} from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
+import { CardContent, Typography, Card, Grid, TextField, Button } from '@mui/material'
 
 export function Login() {
 
@@ -27,18 +28,26 @@ export function Login() {
 
     return (
     <div>
-        <form onSubmit={handleLogin}>
-            <div>
-            <label>Email:
-                <input type="email" placeholder="Email" value={Email} onChange={(e) => setEmail(e.target.value)}></input>
-            </label>
-            <br></br>
-            <label>Password: 
-                <input type="password" placeholder="Password" value={Password} onChange={(e) => setPassword(e.target.value)}></input>  
-            </label>    
-            </div>
-        <button type="submit">Sign In</button>
-        </form>
+        <Card style={{maxWidth:450, margin: '10vh auto', padding: '20px 5px'}}>
+            <CardContent>
+                    <Typography variant='h5' align='center'>Login</Typography>
+                    <form onSubmit={handleLogin}>
+                    <Grid container spacing={1}>
+                        <Grid xs={12} sm={6} item>
+                            <TextField label="Email" placeholder="Enter Email" variant='outlined' fullWidth type="email" value={Email} onChange={(e) => setEmail(e.target.value)}></TextField>
+                        </Grid>
+                        <Grid xs={12} sm={6} item>
+                            <TextField label="Password" placeholder="Enter Password" variant='outlined' fullWidth type="password" value={Password} onChange={(e) => setPassword(e.target.value)}></TextField>
+                        </Grid>
+                        <Grid xs={12} item>
+                            <Button type="submit" fullWidth variant='contained'>Sign In</Button>
+                        </Grid>
+                    </Grid>
+                    </form>
+
+            </CardContent>
+        </Card>
+ 
     </div>
     )
 }

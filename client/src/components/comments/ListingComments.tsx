@@ -10,7 +10,8 @@ export interface rootCommentData {
     parent_id: number | null,
     created: string,
     deal_id: number,
-    username: string
+    username: string,
+    replies: any[]
 }
 
 //props will be the userid

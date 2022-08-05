@@ -4,9 +4,11 @@ import {Listings} from './Listings'
 function Home() {
     
     return (
-        <div>
-            <Listings></Listings>
-        </div>
+  
+            <div>
+                <Listings></Listings>
+            </div>
+
     )
 }
 
