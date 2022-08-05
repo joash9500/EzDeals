@@ -79,7 +79,7 @@ export function AddListing() {
     }
 
     return (
-        <div>
+        <div data-testid='AddListing'>
             <h1>Add New Deal</h1>
             <form onSubmit={handleSubmit}>
                 <label>Title:

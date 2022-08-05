@@ -92,8 +92,8 @@ export function Listings() {
                             <CardMedia
                                 component="img"
                                 height="140"
-                                image={listObj.aws_url}
-                                alt="random image"
+                                image="{listObj.aws_url}"
+                                alt="amazon s3 is not working!!!"
                             />
                             <CardContent>
                                 <Typography gutterBottom variant="h5" component="div">
