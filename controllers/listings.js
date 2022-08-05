@@ -19,6 +19,7 @@ router.get('/active', (req, res) => {
     })
 })
 
+//NOTE: need to fix this route so its more dynamic anad able to change status from a request params! ie. change a deal to inactive or active
 router.post('/active', (req,res) => {
     const sql = 'INSERT INTO deals_status (deal_id, deal_status) VALUES ($1, $2)'
     db.query(sql, [req.body.deal_id, 't']).then((db_res) => {
