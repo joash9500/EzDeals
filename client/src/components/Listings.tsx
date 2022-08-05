@@ -45,21 +45,24 @@ export function Listings() {
             const listingData = res.data
             for (const listing of listingData) {
 
-                let id = listing.deal_id
-                axios.get<urlData>('/api/images', {
-                    params: {
-                        deal_id: id
-                    }
-                }).then((res) => {
-                    console.log('running api images response', res.data)
+                //plan A
+                // let id = listing.deal_id
+                // axios.get<urlData>('/api/images', {
+                //     params: {
+                //         deal_id: id
+                //     }
+                // }).then((res) => {
+                //     console.log('running api images response', res.data)
 
-                    const url = res.data.url
-                    //update the listing with the aws image url
-                    listing['aws_url'] = url
-                    setDealList(prevList => [listing, ...prevList])
-                })
+                //     const url = res.data.url
+                //     //update the listing with the aws image url
+                //     listing['aws_url'] = url
+                //     setDealList(prevList => [listing, ...prevList])
+                // })
+
+                //plan B
+                setDealList(prevList => [listing, ...prevList])
             }
-
         })
     }, [])
 
