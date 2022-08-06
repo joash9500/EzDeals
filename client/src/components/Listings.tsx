@@ -46,22 +46,22 @@ export function Listings() {
             for (const listing of listingData) {
 
                 //plan A
-                // let id = listing.deal_id
-                // axios.get<urlData>('/api/images', {
-                //     params: {
-                //         deal_id: id
-                //     }
-                // }).then((res) => {
-                //     console.log('running api images response', res.data)
+                let id = listing.deal_id
+                axios.get<urlData>('/api/images', {
+                    params: {
+                        deal_id: id
+                    }
+                }).then((res) => {
+                    console.log('running api images response', res.data)
 
-                //     const url = res.data.url
-                //     //update the listing with the aws image url
-                //     listing['aws_url'] = url
-                //     setDealList(prevList => [listing, ...prevList])
-                // })
+                    const url = res.data.url
+                    //update the listing with the aws image url
+                    listing['aws_url'] = url
+                    setDealList(prevList => [listing, ...prevList])
+                })
 
                 //plan B
-                setDealList(prevList => [listing, ...prevList])
+                // setDealList(prevList => [listing, ...prevList])
             }
         })
     }, [])
@@ -95,7 +95,7 @@ export function Listings() {
                             <CardMedia
                                 component="img"
                                 height="140"
-                                image="{listObj.aws_url}"
+                                image={listObj.aws_url}
                                 alt="amazon s3 is not working!!!"
                             />
                             <CardContent>
