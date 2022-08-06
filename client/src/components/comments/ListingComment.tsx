@@ -23,13 +23,13 @@ function ListingComment(data: rootCommentData) {
                     <div>{data.created}</div>
                 </div>
                 <div className="comment-text">{data.body}</div>
-                {data.replies.length > 0 && (
+                {/* {data.replies.length > 0 && (
                     <div className="replies">
                         {data.replies.map((reply) => (
                             <ListingComment {...reply} key={reply.id} replies={[]}></ListingComment>
                         ))}
                     </div>
-                )}
+                )} */}
             </div>
 
         </div>

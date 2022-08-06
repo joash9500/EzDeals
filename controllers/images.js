@@ -65,7 +65,6 @@ router.post('/', upload.single('image'), async (req, res) => {
     db.query(sql, [imageName, deal_id]).then((dbRes) => {
         res.json({msg: 'image uploaded to amazon s3 ga-project4 and updated image name' + imageName + 'for ' + deal_id + ' in psql database', dbRes})
     })
-
 })
 
 router.get('/', async (req, res) => {

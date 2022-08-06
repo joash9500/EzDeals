@@ -33,9 +33,7 @@ interface urlData {
 // }
 
 export function Listings() {
-
     const navigate = useNavigate()
-
     //set up functional states
     const [dealList, setDealList] = useState<dealList[]>([])
     //initial list of deals. once only request hence '[]'
@@ -77,9 +75,7 @@ export function Listings() {
         <div>
             <h1 className="title">Home</h1>
             <Grid container spacing={4} alignItems="center" justifyContent="center" padding="20px">
-
                 {dealList.map((listObj, index) => {
-
                     const cardData = {
                         name: listObj.deal_name,
                         seller: listObj.seller,
@@ -87,7 +83,6 @@ export function Listings() {
                         list_date: listObj.list_date,
                         exp_date: listObj.expire_date,
                     }
-
                     return (
                     <Grid item xs={12} sm={6} md={4} key={index}>
                         <Card sx={{ minWidth: 200 }}>
