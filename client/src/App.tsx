@@ -1,11 +1,11 @@
 import './index.css'
-import Home from './components/Home'
-import About from './components/About';
+import Home from './pages/Home'
+import About from './pages/About';
 import Navbar from './components/Navbar';
-import {Users} from './components/Users';
-import {Login} from './components/Login';
-import Signup from './components/Signup';
-import { AddListing } from './components/AddListing';
+import {User} from './components/User';
+import {Login} from './pages/Login';
+import Signup from './pages/Signup';
+import { AddListing } from './pages/AddListing';
 // npm install react-router-dom
 import {
   Routes,
@@ -22,9 +22,9 @@ function App() {
         <Route path='/about' element={<About></About>}></Route>
         <Route path="/login" element={<Login></Login>}></Route>
         <Route path="/signup" element={<Signup></Signup>}></Route>
-        <Route path='/users'>
-          <Route index element={<Users user_id={5}></Users>}></Route>
-          <Route path=':username' element={<Users user_id={5}></Users>}></Route>
+        <Route path='/user' element={<User></User>}>
+          <Route index element={<User></User>}></Route>
+          <Route path='account' element={<User></User>}></Route>
         </Route>
         <Route path="/deals/add" element={<AddListing></AddListing>}></Route>
         <Route path="/listing/item" element={<ListingItem></ListingItem>}></Route>

@@ -1,5 +1,5 @@
 
-import {Listings} from './Listings'
+import {Listings} from '../components/Listings'
 
 function Home() {
     

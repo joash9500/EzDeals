@@ -1,5 +1,5 @@
 import { rootCommentData } from "./ListingComments"
-import image from '../img/user.png'
+import image from '../../img/user.png'
 
 export interface ReplyData {
     id: number,
@@ -31,7 +31,6 @@ function ListingComment(data: rootCommentData) {
                     </div>
                 )} */}
             </div>
-
         </div>
     )
 }

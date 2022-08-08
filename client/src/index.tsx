@@ -1,3 +1,5 @@
+//IMPORTANT NOTE: index.js (in src folder) is the default location that react uses when building the app! if you move index.js to another folder, you need to 
+//first modify the web-pack
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';

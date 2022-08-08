@@ -102,12 +102,13 @@ function Navbar() {
         <AppBar position='static'>
           <Toolbar>
             <Typography variant='h4' component='div' sx={{ flexGrow: 1}}>
-              Thrifty
+              <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>Thrifty</Link>
             </Typography>
             <Stack direction="row" spacing={2}>
               <NavLink to="/" style={({ isActive }) => isActive ? activeStyle : inactiveStyle}><Typography>Home</Typography></NavLink>
               <NavLink to="/about" style={({ isActive }) => isActive ? activeStyle : inactiveStyle}><Typography>About</Typography></NavLink>
               {isLoggedIn ? <NavLink to="/deals/add" style={({ isActive }) => isActive ? activeStyle : inactiveStyle}><Typography>Add New</Typography></NavLink> : null}
+              {isLoggedIn ? <NavLink to="/user" style={({ isActive }) => isActive ? activeStyle : inactiveStyle}><Typography>Profile</Typography></NavLink> : null}
             
               {isLoggedIn ? null : <NavLink to="/signup" style={({ isActive }) => isActive ? inactiveStyle : inactiveStyle}>
                   <Button size='small' variant='contained' color='secondary'>Sign Up</Button></NavLink> }

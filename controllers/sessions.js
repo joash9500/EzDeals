@@ -29,6 +29,7 @@ router.post('/', (req, res) => {
                 // set the session for user
                 req.session.user_id = userData.id
                 req.session.first_name = userData.first_name
+                req.session.username = userData.username
                 req.session.email = userData.email
                 console.log(req.session)
                 res.json({session: req.session})
@@ -44,6 +45,9 @@ router.post('/', (req, res) => {
 
 //to check if session exists
 router.get('/', (req, res) => {
+    if (req.session == undefined) {
+        res.status(400).json({msg: 'User is not logged in'})
+    }
     res.json({sessionData: req.session})
 })
 
