@@ -16,7 +16,7 @@ export function User() {
     useEffect(() => {
         axios.get('/api/sessions').then((res) => {
             const session = res.data.sessionData
-            setMsg('Welcome Back ' + session.username)
+            setMsg('Welcome Back ' + session.username.toUpperCase())
         }).catch((err) => {
             console.log('Error: ' + err)
         })
@@ -25,7 +25,6 @@ export function User() {
     return (
         <div className='content'>
             <nav>
-                <h1>User Profile</h1>
                 <h2>{msg}</h2>
             </nav>
         </div>

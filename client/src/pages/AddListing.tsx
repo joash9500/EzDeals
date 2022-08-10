@@ -82,7 +82,7 @@ export function AddListing() {
 
     return (
         <div data-testid='AddListing'>
-           
+            
             <h1 className='title'>Add New Deal</h1>
             <form onSubmit={handleSubmit} className="content">
                 <label>Title:

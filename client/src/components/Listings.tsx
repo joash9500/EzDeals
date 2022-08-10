@@ -8,7 +8,7 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { CardActionArea, Grid } from '@mui/material';
 
-interface dealList {
+interface DealList {
     id: number,
     deal_name: string,
     seller: string,
@@ -24,28 +24,24 @@ interface dealList {
     aws_url: string
 }
 
-interface urlData {
+interface URLData {
     url: string
 }
-
-// interface dealId {
-//     deal_id: number
-// }
 
 export function Listings() {
     const navigate = useNavigate()
     //set up functional states
-    const [dealList, setDealList] = useState<dealList[]>([])
+    const [dealList, setDealList] = useState<DealList[]>([])
     //initial list of deals. once only request hence '[]'
     useEffect(() => {
-        axios.get<dealList[]>('/api/listings/active').then((res) => { 
+        axios.get<DealList[]>('/api/listings/active').then((res) => { 
 
             const listingData = res.data
             for (const listing of listingData) {
 
                 //plan A
                 let id = listing.deal_id
-                axios.get<urlData>('/api/images', {
+                axios.get<URLData>('/api/images', {
                     params: {
                         deal_id: id
                     }
