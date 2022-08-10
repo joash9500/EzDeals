@@ -1,7 +1,15 @@
-import {useState} from 'react'
+import React, {useState} from 'react'
 import {Navigate} from 'react-router-dom'
 import axios from 'axios'
 import { CardContent, Typography, Card, Grid, TextField, Button } from '@mui/material'
+
+interface SignupData {
+    first_name: string,
+    last_name: string,
+    username: string,
+    email: string,
+    password: string
+}
 
 function Signup() {
     //render a specific page if signed up or not signed up
@@ -9,20 +17,35 @@ function Signup() {
     //error message
     const [ErrorMsg, setErrorMsg] = useState('')
 
+    //initial signup values
+    const initialValues: SignupData = {
+        first_name: '',
+        last_name: '',
+        username: '',
+        email: '',
+        password: ''
+    }
+
     //inputs from sign up form
-    const [FirstName, setFirstName] = useState('')
-    const [LastName, setLastName] = useState('')
-    const [Username, setUsername] = useState('')
-    const [Email, setEmail] = useState('')
-    const [Password, setPassword] = useState('')
+    const [values, setValues] = useState(initialValues)
 
     //store the new user's data into an object
-    const newUserData = {
-        first_name: FirstName,
-        last_name: LastName,
-        username: Username,
-        email: Email,
-        password: Password
+    const newUserData : SignupData = {
+        first_name: values.first_name,
+        last_name: values.last_name,
+        username: values.username,
+        email: values.email,
+        password: values.password
+    }
+
+    const InputChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+        //get name and value of each input in form
+        const {name, value} = event.target
+        //update values in state
+        setValues({
+            ...values,
+            [name]: value
+        })
     }
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -33,7 +56,7 @@ function Signup() {
             //after sign up, redirect to home page
             setSubmit(true)
             //log user in after signup, and set session cookies
-            axios.post('/api/sessions', {email: Email, password: Password}).then((res) => console.log('new user logged in', res))
+            axios.post('/api/sessions', {email: values.email, password: values.password}).then((res) => console.log('new user logged in', res))
 
         }).catch((err) => {
             console.log(err.response.data.message)
@@ -56,83 +79,31 @@ function Signup() {
                     <form onSubmit={handleSubmit}>
                     <Grid container spacing={1}>
                         <Grid xs={12} sm={6} item>
-                            <TextField label="First Name" placeholder="Enter First Name" variant='outlined' fullWidth value={FirstName}  onChange={(e) => setFirstName(e.target.value)}></TextField>
+                            <TextField label="First Name" placeholder="Enter First Name" variant='outlined' fullWidth name="first_name" value={values.first_name}  onChange={InputChangeHandler}></TextField>
                         </Grid>
                         <Grid xs={12} sm={6} item>
-                            <TextField label="Last Name" placeholder="Enter Last Name" variant='outlined' fullWidth value={LastName} onChange={(e) => setLastName(e.target.value)}></TextField>
+                            <TextField label="Last Name" placeholder="Enter Last Name" variant='outlined' fullWidth name="last_name" value={values.last_name} onChange={InputChangeHandler}></TextField>
                         </Grid>
                         <Grid xs={12} sm={12} item>
-                            <TextField label="Username" placeholder="Enter Username" variant='outlined' fullWidth value={Username} onChange={(e) => setUsername(e.target.value)}></TextField>
+                            <TextField label="Username" placeholder="Enter Username" variant='outlined' fullWidth name="username" value={values.username} onChange={InputChangeHandler}></TextField>
                         </Grid>
                         <Grid xs={12} sm={12} item>
-                            <TextField label="Email" placeholder="Enter Email" variant='outlined' fullWidth type="email" value={Email} onChange={(e) => setEmail(e.target.value)}></TextField>
+                            <TextField label="Email" placeholder="Enter Email" variant='outlined' fullWidth type="email" name="email" value={values.email} onChange={InputChangeHandler}></TextField>
                         </Grid>
                         <Grid xs={12} sm={12} item>
-                            <TextField label="Password" placeholder="Enter Password" variant='outlined' fullWidth type="password" value={Password} onChange={(e) => setPassword(e.target.value)}></TextField>
+                            <TextField label="Password" placeholder="Enter Password" variant='outlined' fullWidth type="password" name="password" value={values.password} onChange={InputChangeHandler}></TextField>
                         </Grid>
-
 
                         <Grid xs={12} item>
                             <Button type="submit" fullWidth variant='contained'>Sign Up</Button>
                         </Grid>
+                        
                     </Grid>
                     </form>
             </CardContent>
             </Card>
             
             <p>{ErrorMsg}</p>
-
-
-            {/* <h1>Sign Up!</h1>
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <label>First Name:
-                        <input 
-                        type="text" 
-                        placeholder="Sam" 
-                        value={FirstName}
-                        onChange={(e) => setFirstName(e.target.value)}
-                        ></input>
-                    </label>
-                    <br></br>
-                    <label>Last Name:
-                        <input 
-                        type="text" 
-                        placeholder="Smith" 
-                        value={LastName}
-                        onChange={(e) => setLastName(e.target.value)}
-                        ></input>
-                    </label>
-                    <br></br>
-                    <label>Username:
-                        <input 
-                        type="text" 
-                        placeholder="Smith1.0" 
-                        value={Username}
-                        onChange={(e) => setUsername(e.target.value)}
-                        ></input>
-                    </label>
-                    <br></br>
-                    <label>Email:
-                        <input 
-                        type="email" 
-                        placeholder="samsmith@example.com" 
-                        value={Email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        ></input>
-                    </label>
-                    <br></br>
-                    <label>Password: 
-                        <input 
-                        type="password" 
-                        placeholder="Password" 
-                        value={Password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        ></input>  
-                    </label>    
-                    </div>
-                <button type="submit" value="submit">Sign Up</button>
-            </form> */}
 
         </div>
      )
