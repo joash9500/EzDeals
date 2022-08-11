@@ -1,6 +1,18 @@
 import React, {useState} from 'react'
 import axios from "axios"
-import { CardContent, Typography, Card, Grid, TextField, Button } from '@mui/material'
+import { CardContent, Typography, Card, Grid, TextField, Button, FormControl, InputLabel, Select, MenuItem} from '@mui/material'
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import { UploadFile } from '@mui/icons-material'
+
+interface AddListing {
+    deal_name: string,
+    seller: string,
+    current_price: number,
+    original_price: number,
+    expire_date: string | null,
+    delivery_type: string,
+}
 
 export function AddListing() {
     //error message
@@ -12,14 +24,15 @@ export function AddListing() {
     const [CurrentPrice, setCurrentPrice] = useState<number>(0)
     const [OriginalPrice, setOriginalPrice] = useState<number>(0)
     // Listing Date is automatically set with the CURRENT_DATE executed in the listing.js (server side)
-    const [ExpireDate, setExpireDate] = useState<string>('')
+    const [ExpireDate, setExpireDate] = useState<string | null>('')
     //Delivery type is either online or physical. NOTE, we had to initialise a value here e.g. 'online' otherwise its always an empty string ''
     const [DeliveryType, setDeliveryType] = useState<string>('online')
+
     //For image uploads, which will eventually go into the AMAZON s3 cloud server (NOT psql database). NOTE defined the type as a FILE or null (ie. nothing)
     const [ImageFile, setImageFile] = useState<Blob | string>('')
 
     //store new post listing data into an object
-    const newListing = {
+    const newListing : AddListing = {
         deal_name: DealName,
         seller: Seller,
         current_price: CurrentPrice,
@@ -68,10 +81,10 @@ export function AddListing() {
         })
     }
 
-    //handler for select options in form. select uses a different event listener HTMLSelectElement
-    const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        setDeliveryType(event.target.value)
-    }
+    // //handler for select options in form. select uses a different event listener HTMLSelectElement
+    // const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    //     setDeliveryType(event.target.value)
+    // }
 
     const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
         //handle null case
@@ -82,8 +95,85 @@ export function AddListing() {
 
     return (
         <div data-testid='AddListing'>
-            
-            <h1 className='title'>Add New Deal</h1>
+            <FormControl>
+                <form onSubmit={handleSubmit}>
+                <h1 className='title'>Add New Deal 1</h1>
+                <Grid container>
+                    <Grid item xs={6}>
+                    <TextField
+                            variant="outlined"
+                            label="Title"
+                            name="deal_name"
+                            value={DealName} 
+                            onChange={(e) => setDealName(e.target.value)}
+                        ></TextField>
+                        <TextField
+                            variant="outlined"
+                            label="Seller"
+                            name="seller"
+                            value={Seller} 
+                            onChange={(e) => setSeller(e.target.value)}
+                        ></TextField>
+                        <TextField
+                            inputProps={{ inputMode: 'numeric', pattern: '[0-9]*'}}
+                            variant="outlined"
+                            label="Current Price"
+                            name="current_price"
+                            value={CurrentPrice} 
+                            onChange={(e) => {
+                                const inputAsNumber = parseInt(e.target.value)
+                                return setCurrentPrice(inputAsNumber)
+                        }}></TextField>
+                        <TextField
+                            inputProps={{ inputMode: 'numeric', pattern: '[0-9]*'}}
+                            variant="outlined"
+                            label="Original Price"
+                            name="original_price"
+                            value={OriginalPrice} 
+                            onChange={(e) => {
+                                const inputAsNumber = parseInt(e.target.value)
+                                return setOriginalPrice(inputAsNumber)
+                        }}></TextField>
+                        <LocalizationProvider dateAdapter={AdapterDateFns}>
+                            <DatePicker            
+                                label="Expiry Date"
+                                // name="expire_date"
+                                value={ExpireDate} 
+                                onChange={(newValue: string | null) => 
+                                    {setExpireDate(newValue)
+                                    }}
+                                renderInput={(params) => <TextField name='expire_date' {...params}></TextField>}
+                            ></DatePicker>
+                        </LocalizationProvider>
+                        <InputLabel id="select-delivery"></InputLabel>
+                        <Select
+                            labelId='select-delivery'
+                            value={DeliveryType}
+                            label="Delivery Type"
+                            onChange={(e) => setDeliveryType(e.target.value)}
+                        >
+                            <MenuItem value={'physical'}>Physical</MenuItem>
+                            <MenuItem value={'online'}>Online</MenuItem>
+                        </Select>
+                        <Button
+                            component="label"
+                            variant='outlined'
+                            startIcon={<UploadFile></UploadFile>}
+                            sx={{ marginRight: "1rem"}}
+                        >
+                            Upload Image
+                            <input type="file" hidden name="image" accept=".png, .jpg, .jpeg" 
+                                onChange={handleImageUpload}></input>
+                        </Button>
+
+                        <Button type="submit">Submit</Button>
+
+                    </Grid>
+                </Grid>
+                </form>
+            </FormControl>
+ 
+            {/* <h1 className='title'>Add New Deal 2</h1>
             <form onSubmit={handleSubmit} className="content">
                 <label>Title:
                     <input type="text" value={DealName} onChange={(e) => setDealName(e.target.value)}></input>
@@ -105,7 +195,7 @@ export function AddListing() {
                     <input type="date" value={ExpireDate} onChange={(e) => setExpireDate(e.target.value)}></input>
                 </label>
                 <br></br>
-                {/* select options has a different format, so we have to set up a unique function to handle the select event ie handleSelectChange */}
+              
                 <label>Delivery Type:
                     <select value={DeliveryType} onChange={handleSelectChange}>
                         <option value="online">Online</option>
@@ -119,7 +209,7 @@ export function AddListing() {
                 </label>
                 <br></br>
                 <button type="submit" value="Submit">Add Listing</button>
-            </form>
+            </form> */}
         </div>
     )
 }
