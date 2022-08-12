@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 import axios from "axios"
-import { CardContent, Typography, Card, Grid, TextField, Button, FormControl, InputLabel, Select, MenuItem} from '@mui/material'
+import { CardContent, Typography, Card, Grid, TextField, Button, FormControl, InputLabel, Select, MenuItem, Box} from '@mui/material'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { UploadFile } from '@mui/icons-material'
@@ -8,8 +8,8 @@ import { UploadFile } from '@mui/icons-material'
 interface AddListing {
     deal_name: string,
     seller: string,
-    current_price: number,
-    original_price: number,
+    current_price: number | "",
+    original_price: number | "",
     expire_date: string | null,
     delivery_type: string,
 }
@@ -21,15 +21,16 @@ export function AddListing() {
     //inputs for add listing form
     const [DealName, setDealName] = useState<string>('')
     const [Seller, setSeller] = useState<string>('')
-    const [CurrentPrice, setCurrentPrice] = useState<number>(0)
-    const [OriginalPrice, setOriginalPrice] = useState<number>(0)
-    // Listing Date is automatically set with the CURRENT_DATE executed in the listing.js (server side)
+    const [CurrentPrice, setCurrentPrice] = useState<number | ''>('')
+    const [OriginalPrice, setOriginalPrice] = useState<number | ''>('')
+    // Listing Date is automatically set with the CURRENT_DATE executed in the listing.js (server sde)
     const [ExpireDate, setExpireDate] = useState<string | null>('')
     //Delivery type is either online or physical. NOTE, we had to initialise a value here e.g. 'online' otherwise its always an empty string ''
-    const [DeliveryType, setDeliveryType] = useState<string>('online')
+    const [DeliveryType, setDeliveryType] = useState<string>('')
 
-    //For image uploads, which will eventually go into the AMAZON s3 cloud server (NOT psql database). NOTE defined the type as a FILE or null (ie. nothing)
+    //For image uploads, which will eventually go into the AMAZON s3 cloud server (NOT psql database). NOTE formData can only take Blob or string types as input
     const [ImageFile, setImageFile] = useState<Blob | string>('')
+    const [Filename, setFilename] = useState<string>('')
 
     //store new post listing data into an object
     const newListing : AddListing = {
@@ -81,40 +82,49 @@ export function AddListing() {
         })
     }
 
-    // //handler for select options in form. select uses a different event listener HTMLSelectElement
-    // const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    //     setDeliveryType(event.target.value)
-    // }
-
     const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
         //handle null case
         if (event.target.files) {
-            setImageFile(event.target.files[0])
+            const file = event.target.files[0]
+            const {name} = file
+            setFilename(name)
+            setImageFile(file)
         }
     }
 
     return (
         <div data-testid='AddListing'>
-            <FormControl>
-                <form onSubmit={handleSubmit}>
+           
+            <form onSubmit={handleSubmit}>
+            <FormControl margin='normal'>
                 <h1 className='title'>Add New Deal 1</h1>
-                <Grid container>
-                    <Grid item xs={6}>
-                    <TextField
+                <Grid container spacing={1}>
+                    <Grid item xs={12}>
+                        <TextField
+                            required
+                            fullWidth
                             variant="outlined"
                             label="Title"
                             name="deal_name"
                             value={DealName} 
                             onChange={(e) => setDealName(e.target.value)}
                         ></TextField>
+                    </Grid>
+                    <Grid item xs={12}>
                         <TextField
+                           required
+                           fullWidth
                             variant="outlined"
                             label="Seller"
                             name="seller"
                             value={Seller} 
                             onChange={(e) => setSeller(e.target.value)}
                         ></TextField>
+                    </Grid>
+                    <Grid item xs={12}>
                         <TextField
+                           required
+                           fullWidth
                             inputProps={{ inputMode: 'numeric', pattern: '[0-9]*'}}
                             variant="outlined"
                             label="Current Price"
@@ -122,9 +132,18 @@ export function AddListing() {
                             value={CurrentPrice} 
                             onChange={(e) => {
                                 const inputAsNumber = parseInt(e.target.value)
-                                return setCurrentPrice(inputAsNumber)
+                                console.log(inputAsNumber)
+                                //check NaN or empty case before updating
+                                if (isNaN(inputAsNumber)) {
+                                    return setCurrentPrice('')
+                                } 
+                                setCurrentPrice(inputAsNumber)
                         }}></TextField>
+                    </Grid>
+                    <Grid item xs={12}>
                         <TextField
+                            required
+                            fullWidth
                             inputProps={{ inputMode: 'numeric', pattern: '[0-9]*'}}
                             variant="outlined"
                             label="Original Price"
@@ -132,10 +151,16 @@ export function AddListing() {
                             value={OriginalPrice} 
                             onChange={(e) => {
                                 const inputAsNumber = parseInt(e.target.value)
-                                return setOriginalPrice(inputAsNumber)
+                                //check NaN or empty case before updating
+                                if (isNaN(inputAsNumber)) {
+                                    return setOriginalPrice('')
+                                } 
+                                setOriginalPrice(inputAsNumber)
                         }}></TextField>
+                    </Grid>
+                    <Grid item xs={4}>
                         <LocalizationProvider dateAdapter={AdapterDateFns}>
-                            <DatePicker            
+                            <DatePicker         
                                 label="Expiry Date"
                                 // name="expire_date"
                                 value={ExpireDate} 
@@ -145,16 +170,24 @@ export function AddListing() {
                                 renderInput={(params) => <TextField name='expire_date' {...params}></TextField>}
                             ></DatePicker>
                         </LocalizationProvider>
-                        <InputLabel id="select-delivery"></InputLabel>
-                        <Select
-                            labelId='select-delivery'
+                    </Grid>
+                    <Grid item xs={4}>
+                        <TextField
+                            required
+                            fullWidth
+                            variant='outlined'
+                            select
                             value={DeliveryType}
-                            label="Delivery Type"
                             onChange={(e) => setDeliveryType(e.target.value)}
+                            label="Delivery Type"
                         >
                             <MenuItem value={'physical'}>Physical</MenuItem>
                             <MenuItem value={'online'}>Online</MenuItem>
-                        </Select>
+                        </TextField>
+
+                    </Grid>
+
+                    <Grid item xs={4}>
                         <Button
                             component="label"
                             variant='outlined'
@@ -165,51 +198,17 @@ export function AddListing() {
                             <input type="file" hidden name="image" accept=".png, .jpg, .jpeg" 
                                 onChange={handleImageUpload}></input>
                         </Button>
+                        <Box>{Filename}</Box>
 
                         <Button type="submit">Submit</Button>
-
                     </Grid>
+                    
                 </Grid>
-                </form>
-            </FormControl>
- 
-            {/* <h1 className='title'>Add New Deal 2</h1>
-            <form onSubmit={handleSubmit} className="content">
-                <label>Title:
-                    <input type="text" value={DealName} onChange={(e) => setDealName(e.target.value)}></input>
-                </label>
-                <br></br>
-                <label>Seller:
-                    <input type="text" value={Seller} onChange={(e) => setSeller(e.target.value)}></input>
-                </label>
-                <br></br>
-                <label>Current Price:
-                    <input type="number" value={CurrentPrice} onChange={(e) => setCurrentPrice(e.target.valueAsNumber)}></input>
-                </label>
-                <br></br>
-                <label>Original Price:
-                    <input type="number" value={OriginalPrice} onChange={(e) => setOriginalPrice(e.target.valueAsNumber)}></input>
-                </label>
-                <br></br>
-                <label>Expire Date:
-                    <input type="date" value={ExpireDate} onChange={(e) => setExpireDate(e.target.value)}></input>
-                </label>
-                <br></br>
-              
-                <label>Delivery Type:
-                    <select value={DeliveryType} onChange={handleSelectChange}>
-                        <option value="online">Online</option>
-                        <option value="physical">Physical</option>
-                    </select>
-                </label>
-                <br></br>
-                <label>Image Upload:
-                    <input type="file" name="image" accept=".png, .jpg, .jpeg" 
-                        onChange={handleImageUpload}></input>
-                </label>
-                <br></br>
-                <button type="submit" value="Submit">Add Listing</button>
-            </form> */}
+                </FormControl>
+            </form>
+
+     
+
         </div>
     )
 }
