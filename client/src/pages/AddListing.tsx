@@ -102,7 +102,7 @@ export function AddListing() {
     return (
         <div data-testid='AddListing' style={{display:'flex', justifyContent: 'center'}}>
 
-            <form onSubmit={handleSubmit} style={{width: '80vw'}}>
+            <form onSubmit={handleSubmit} style={{width: '60vw', minWidth: '540px'}}>
                 <Grid container spacing={2} marginTop={0} justifyContent="center">
                 <Typography variant='h4' margin="10px">Add New Deal</Typography>
                     <Grid item xs={12}>
@@ -172,7 +172,7 @@ export function AddListing() {
                         }}></TextField>
 
                     </Grid>
-                    <Grid item xs={4}>
+                    <Grid item xs={4} style={{display: 'flex', flexDirection: 'column', alignContent: 'center'}}>
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
                         <DatePicker         
                             label="Expiry Date"
@@ -184,7 +184,7 @@ export function AddListing() {
                         ></DatePicker>
                     </LocalizationProvider>
                     </Grid>
-                    <Grid item xs={4}>
+                    <Grid item xs={4} style={{display: 'flex', flexDirection: 'column', alignContent: 'center'}}>
                     <TextField
                         required
                         fullWidth
@@ -210,7 +210,7 @@ export function AddListing() {
                     </Button>
                     <Box>{Filename}</Box>
                     </Grid>
-                    <Grid item xs={12} style={{display: 'flex',  justifyContent: 'center', width: 'auto'}}>
+                    <Grid item xs={12} style={{display: 'flex',  justifyContent: 'center'}}>
                         <Button 
                                 type="submit"
                                 variant='outlined'
