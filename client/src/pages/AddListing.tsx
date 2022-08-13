@@ -1,9 +1,10 @@
 import React, {useState} from 'react'
 import axios from "axios"
-import { CardContent, Typography, Card, Grid, TextField, Button, FormControl, InputLabel, Select, MenuItem, Box} from '@mui/material'
+import {Typography, Grid, TextField, Button, MenuItem, Box} from '@mui/material'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { UploadFile } from '@mui/icons-material'
+import {useNavigate} from 'react-router-dom'
 
 interface AddListing {
     deal_name: string,
@@ -17,6 +18,9 @@ interface AddListing {
 export function AddListing() {
     //error message
     const [ErrorMsg, setErrorMsg] = useState<string>('')
+
+    //navigate to diff page
+    const navigate = useNavigate()
 
     //inputs for add listing form
     const [DealName, setDealName] = useState<string>('')
@@ -75,8 +79,11 @@ export function AddListing() {
                         //send image from formdata to server
                         axios.post('/api/images', formData, {
                             headers: {'Content-Type': 'multipart/form-data'}
+                        }).then((res) => {
+                            //once image has been sent successfully to aws s3, redirect ot home page
+                            navigate('/')
                         })
-                    }
+                    }  
                 })
             }
         })
@@ -93,13 +100,13 @@ export function AddListing() {
     }
 
     return (
-        <div data-testid='AddListing'>
-           
-            <form onSubmit={handleSubmit}>
-            <FormControl margin='normal'>
-                <h1 className='title'>Add New Deal 1</h1>
-                <Grid container spacing={1}>
+        <div data-testid='AddListing' style={{display:'flex', justifyContent: 'center'}}>
+
+            <form onSubmit={handleSubmit} style={{width: '80vw'}}>
+                <Grid container spacing={2} marginTop={0} justifyContent="center">
+                <Typography variant='h4' margin="10px">Add New Deal</Typography>
                     <Grid item xs={12}>
+                    
                         <TextField
                             required
                             fullWidth
@@ -109,8 +116,10 @@ export function AddListing() {
                             value={DealName} 
                             onChange={(e) => setDealName(e.target.value)}
                         ></TextField>
+   
                     </Grid>
                     <Grid item xs={12}>
+      
                         <TextField
                            required
                            fullWidth
@@ -120,8 +129,10 @@ export function AddListing() {
                             value={Seller} 
                             onChange={(e) => setSeller(e.target.value)}
                         ></TextField>
+              
                     </Grid>
                     <Grid item xs={12}>
+   
                         <TextField
                            required
                            fullWidth
@@ -139,8 +150,10 @@ export function AddListing() {
                                 } 
                                 setCurrentPrice(inputAsNumber)
                         }}></TextField>
+              
                     </Grid>
                     <Grid item xs={12}>
+          
                         <TextField
                             required
                             fullWidth
@@ -157,58 +170,55 @@ export function AddListing() {
                                 } 
                                 setOriginalPrice(inputAsNumber)
                         }}></TextField>
-                    </Grid>
-                    <Grid item xs={4}>
-                        <LocalizationProvider dateAdapter={AdapterDateFns}>
-                            <DatePicker         
-                                label="Expiry Date"
-                                // name="expire_date"
-                                value={ExpireDate} 
-                                onChange={(newValue: string | null) => 
-                                    {setExpireDate(newValue)
-                                    }}
-                                renderInput={(params) => <TextField name='expire_date' {...params}></TextField>}
-                            ></DatePicker>
-                        </LocalizationProvider>
-                    </Grid>
-                    <Grid item xs={4}>
-                        <TextField
-                            required
-                            fullWidth
-                            variant='outlined'
-                            select
-                            value={DeliveryType}
-                            onChange={(e) => setDeliveryType(e.target.value)}
-                            label="Delivery Type"
-                        >
-                            <MenuItem value={'physical'}>Physical</MenuItem>
-                            <MenuItem value={'online'}>Online</MenuItem>
-                        </TextField>
 
                     </Grid>
-
                     <Grid item xs={4}>
-                        <Button
-                            component="label"
-                            variant='outlined'
-                            startIcon={<UploadFile></UploadFile>}
-                            sx={{ marginRight: "1rem"}}
-                        >
-                            Upload Image
-                            <input type="file" hidden name="image" accept=".png, .jpg, .jpeg" 
-                                onChange={handleImageUpload}></input>
-                        </Button>
-                        <Box>{Filename}</Box>
-
-                        <Button type="submit">Submit</Button>
+                    <LocalizationProvider dateAdapter={AdapterDateFns}>
+                        <DatePicker         
+                            label="Expiry Date"
+                            value={ExpireDate} 
+                            onChange={(newValue: string | null) => 
+                                {setExpireDate(newValue)
+                                }}
+                            renderInput={(params) => <TextField name='expire_date' {...params}></TextField>}
+                        ></DatePicker>
+                    </LocalizationProvider>
                     </Grid>
-                    
+                    <Grid item xs={4}>
+                    <TextField
+                        required
+                        fullWidth
+                        variant='outlined'
+                        select
+                        value={DeliveryType}
+                        onChange={(e) => setDeliveryType(e.target.value)}
+                        label="Delivery Type"
+                    >
+                        <MenuItem value={'physical'}>Physical</MenuItem>
+                        <MenuItem value={'online'}>Online</MenuItem>
+                    </TextField>
+                    </Grid>
+                    <Grid item xs={4} style={{display: 'flex', flexDirection: 'column', alignContent: 'center'}}>
+                    <Button
+                        component="label"
+                        variant='outlined'
+                        startIcon={<UploadFile></UploadFile>}
+                    >
+                        Upload Image
+                        <input type="file" hidden name="image" accept=".png, .jpg, .jpeg" 
+                            onChange={handleImageUpload}></input>
+                    </Button>
+                    <Box>{Filename}</Box>
+                    </Grid>
+                    <Grid item xs={12} style={{display: 'flex',  justifyContent: 'center', width: 'auto'}}>
+                        <Button 
+                                type="submit"
+                                variant='outlined'
+                            >Submit</Button>
+                    </Grid>
+          
                 </Grid>
-                </FormControl>
-            </form>
-
-     
-
+                </form>
         </div>
     )
 }

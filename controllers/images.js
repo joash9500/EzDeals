@@ -86,7 +86,6 @@ router.get('/', async (req, res) => {
     const command = new GetObjectCommand(getObjectParams);
     const url = await getSignedUrl(s3, command, { expiresIn: 3600 });
     res.json({url: url})
-
 })
 
 module.exports = router
