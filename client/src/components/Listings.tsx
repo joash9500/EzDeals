@@ -8,6 +8,7 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { CardActionArea, Grid } from '@mui/material';
 
+
 interface DealList {
     id: number,
     deal_name: string,
@@ -81,22 +82,28 @@ export function Listings() {
                     }
                     return (
                     <Grid item xs={12} sm={6} md={4} key={index}>
-                        <Card sx={{ minWidth: 200 }}>
-                            <CardActionArea onClick={() => handleRedirect(cardData)}>
+                        <Card sx={{ minWidth: 200}}>
+                            <CardActionArea onClick={() => handleRedirect(cardData)} >
                             <CardMedia
                                 component="img"
                                 height="140"
                                 image={listObj.aws_url}
                                 alt="amazon s3 is not working!!!"
                             />
-                            <CardContent>
+                            <CardContent sx={{flexDirection: 'column', justifyContent: 'space-between'}} className="card-content">
                                 <Typography gutterBottom variant="h5" component="div">
                                 {cardData.name}
                                 </Typography>
                                 <Typography variant="body2" color="text.secondary">
                                 Seller: {cardData.seller} 
+                                </Typography>
+                                <Typography variant="body2" color="text.secondary">
                                 Current Price: {cardData.curr_price} 
+                                </Typography>
+                                <Typography variant="body2" color="text.secondary">
                                 Date Listed: {cardData.list_date} 
+                                </Typography>
+                                <Typography variant="body2" color="text.secondary">
                                 Expiry: {cardData.exp_date} 
                                 </Typography>
                             </CardContent>

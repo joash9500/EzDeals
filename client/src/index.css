@@ -23,6 +23,19 @@ body {
   margin: 20px;
 }
 
+.card-title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: blue;
+}
+
+.card-content {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 /* comments css from 
 monsterlessonsacademy, author: Oleksandr Kocherhin  
  */
