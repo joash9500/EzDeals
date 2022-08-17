@@ -87,7 +87,7 @@ INSERT INTO comments (body, users_id, parent_id, created, deal_id)
 VALUES (
     'I agree!',
     2,
-    null,
+    1,
     CURRENT_DATE,
     1
 );
@@ -96,7 +96,7 @@ INSERT INTO comments (body, users_id, parent_id, created, deal_id)
 VALUES (
     'Same it looks fantastic',
     3,
-    null,
+    1,
     CURRENT_DATE,
     1
 );
