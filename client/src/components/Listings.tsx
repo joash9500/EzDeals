@@ -28,7 +28,8 @@ interface URLData {
     url: string
 }
 
-interface cardData {
+export interface cardData {
+    deal_id: number,
     name: string,
     seller: string,
     curr_price: number,
@@ -76,7 +77,9 @@ export function Listings() {
             <h1 className="title">Home</h1>
             <Grid container spacing={4} alignItems="center" justifyContent="center" padding="20px">
                 {dealList.map((listObj, index) => {
+                    
                     const cardData: cardData = {
+                        deal_id: listObj.id,
                         name: listObj.deal_name,
                         seller: listObj.seller,
                         curr_price: listObj.current_price,

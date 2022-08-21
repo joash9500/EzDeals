@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react"
 import axios from "axios"
 import ListingComment from "./ListingComment";
+import ListingCommentForm from "./ListingCommentForm";
+import { itemData } from "../ListingItem";
 
 // set up interface for props to ListingComment
 export type commentData = {
@@ -13,15 +15,40 @@ export type commentData = {
     username: string,
 }
 
+//for new comments
+export type commentDataNew = {
+    text: string,
+    users_id: number,
+    parent_id: null,
+    deal_id: number,
+}
+
 export interface commentProps {
     comment: commentData,
     replies: commentData[]
 }
 
+export interface addCommentProps {
+    handleSubmit: (text: string, parent_id: number | null) => void
+}
+
 //props will be the userid
-function ListingComments() {
+export function ListingComments({itemData}:itemData) {
 
     const [backendComments, setBackendComments] = useState<commentData[] | []>([])
+
+    //run once when mounting component
+    useEffect(() => {
+        axios.get('/api/comments', {
+            params: {
+                deal_id: itemData.deal_id
+            }
+        }).then((res) => {
+            const comments = res.data
+            console.log(comments)
+            setBackendComments(comments)
+        })
+    }, [])
 
      //get parent comments first before rendering child comments, note filter only works on arrays. parent comments have no parents (ie parent_id will be null)
      const rootComments = backendComments.filter(
@@ -30,7 +57,6 @@ function ListingComments() {
 
     //sort replies to show newest comments LAST. earliest comments FIRST
     const getReplies = (comment_id: number) => {
-        console.log('get replies is running')
         return backendComments.filter((backendComment) =>
             backendComment.parent_id === comment_id
         ).sort((a,b) => 
@@ -38,17 +64,34 @@ function ListingComments() {
         )
     }
 
-    //run once when mounting component
-    useEffect(() => {
-        axios.get('/api/comments').then((res) => {
-            const comments = res.data
-            setBackendComments(comments)
+    //when adding a new comment, you're creating a new rootComment that can potentially have children (ie. reply comments) later
+    const addComment = (text: string, parent_id: number | null) => {
+        console.log('add comment', text, parent_id)
+
+        axios.get('/api/sessions').then((res) => {
+            const session = res.data
+            const user_id = session.sessionData.user_id
+
+            const newCommentData:commentDataNew = {
+                text: text,
+                users_id: user_id,
+                parent_id: null,
+                deal_id: itemData.deal_id,
+            }
+
+            axios.post('/api/comments', {
+                data: newCommentData
+            }).then((res) => {
+                console.log("comments added to database", res.data)
+            })
         })
-    }, [])
+    }
 
     return (
         <div className="comments">  
-            <h4 className="comment-title">Comments:</h4>
+            <h4 className="comment-title">Comments</h4>
+            <div className="comment-form-title">Add Comment</div>
+            <ListingCommentForm handleSubmit={addComment}></ListingCommentForm>
             <div className="comments-container">
                 {rootComments.map((rootComment) => {
                     const replies = getReplies(rootComment.id)
@@ -60,10 +103,8 @@ function ListingComments() {
                     ></ListingComment>
                     )
                 }
-                )}
+                )} 
             </div>
         </div>
     )
 }
-
-export default ListingComments

@@ -19,7 +19,7 @@ function ListingComment({comment, replies}: commentProps) {
                         {replies.map((reply) => {
                             return (
                         <ListingComment 
-                            key={comment.parent_id} 
+                            key={reply.id} 
                             comment={reply}
                             replies={[]}
                         ></ListingComment>)
