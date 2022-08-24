@@ -7,7 +7,8 @@ function ListingCommentForm({handleSubmit}: addCommentProps) {
     const isTextareaDisabled = text.length === 0
     const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
-        handleSubmit(text, null)
+        handleSubmit(text)
+        setText('')
     }
 
     return (

@@ -17,7 +17,7 @@ export type commentData = {
 
 //for new comments
 export type commentDataNew = {
-    text: string,
+    body: string,
     users_id: number,
     parent_id: null,
     deal_id: number,
@@ -26,10 +26,10 @@ export type commentDataNew = {
 export interface commentProps {
     comment: commentData,
     replies: commentData[]
-}
+}  
 
 export interface addCommentProps {
-    handleSubmit: (text: string, parent_id: number | null) => void
+    handleSubmit: (text: string) => void
 }
 
 //props will be the userid
@@ -37,22 +37,9 @@ export function ListingComments({itemData}:itemData) {
 
     const [backendComments, setBackendComments] = useState<commentData[] | []>([])
 
-    //run once when mounting component
-    useEffect(() => {
-        axios.get('/api/comments', {
-            params: {
-                deal_id: itemData.deal_id
-            }
-        }).then((res) => {
-            const comments = res.data
-            console.log(comments)
-            setBackendComments(comments)
-        })
-    }, [])
-
      //get parent comments first before rendering child comments, note filter only works on arrays. parent comments have no parents (ie parent_id will be null)
      const rootComments = backendComments.filter(
-        backendComment => backendComment.parent_id === null
+        (backendComment) => backendComment.parent_id === null
     ); 
 
     //sort replies to show newest comments LAST. earliest comments FIRST
@@ -65,27 +52,46 @@ export function ListingComments({itemData}:itemData) {
     }
 
     //when adding a new comment, you're creating a new rootComment that can potentially have children (ie. reply comments) later
-    const addComment = (text: string, parent_id: number | null) => {
-        console.log('add comment', text, parent_id)
+    const addComment = (text: string) => {
+        // console.log('add comment', text, parent_id)
 
         axios.get('/api/sessions').then((res) => {
             const session = res.data
             const user_id = session.sessionData.user_id
+            const deal_id = itemData.deal_id
 
             const newCommentData:commentDataNew = {
-                text: text,
+                body: text,
                 users_id: user_id,
                 parent_id: null,
-                deal_id: itemData.deal_id,
+                deal_id: deal_id,
             }
 
             axios.post('/api/comments', {
                 data: newCommentData
             }).then((res) => {
-                console.log("comments added to database", res.data)
+                const new_comment = res.data
+                console.log(new_comment)
+                console.log(backendComments)
+                console.log([new_comment, ...backendComments])
+                //update the page with the new comment that was added
+                setBackendComments([new_comment, ...backendComments])
             })
         })
     }
+
+    //run once when mounting component
+    useEffect(() => {
+        axios.get('/api/comments', {
+            params: {
+                deal_id: itemData.deal_id
+            }
+        }).then((res) => {
+            const comments = res.data
+            console.log(comments)
+            setBackendComments(comments)
+        })
+    },[])
 
     return (
         <div className="comments">  
