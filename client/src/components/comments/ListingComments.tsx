@@ -58,6 +58,7 @@ export function ListingComments({itemData}:itemData) {
         axios.get('/api/sessions').then((res) => {
             const session = res.data
             const user_id = session.sessionData.user_id
+            const username = session.sessionData.username
             const deal_id = itemData.deal_id
 
             const newCommentData:commentDataNew = {
@@ -67,13 +68,20 @@ export function ListingComments({itemData}:itemData) {
                 deal_id: deal_id,
             }
 
+            console.log(newCommentData)
+
             axios.post('/api/comments', {
                 data: newCommentData
             }).then((res) => {
-                const new_comment = res.data
-                console.log(new_comment)
-                console.log(backendComments)
-                console.log([new_comment, ...backendComments])
+                const new_comment:commentData = {
+                    id: res.data.rows[0].id,
+                    body: text,
+                    users_id: user_id,
+                    parent_id: null,
+                    created: res.data.rows[0].created,
+                    deal_id: deal_id,
+                    username: username,
+                }
                 //update the page with the new comment that was added
                 setBackendComments([new_comment, ...backendComments])
             })
