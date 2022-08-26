@@ -37,17 +37,19 @@ export function ListingComments({itemData}:itemData) {
 
     const [backendComments, setBackendComments] = useState<commentData[] | []>([])
 
-     //get parent comments first before rendering child comments, note filter only works on arrays. parent comments have no parents (ie parent_id will be null)
-     const rootComments = backendComments.filter(
+    //get parent comments first before rendering child comments, note filter only works on arrays. parent comments have no parents (ie parent_id will be null)
+    const rootComments = backendComments.filter(
         (backendComment) => backendComment.parent_id === null
-    ); 
+    ).sort((a,b) => 
+        new Date(b.created).getTime() - new Date(a.created).getTime()
+    )   
 
     //sort replies to show newest comments LAST. earliest comments FIRST
     const getReplies = (comment_id: number) => {
         return backendComments.filter((backendComment) =>
             backendComment.parent_id === comment_id
         ).sort((a,b) => 
-            new Date(a.created).getTime() - new Date(b.created).getTime()
+            new Date(b.created).getTime() - new Date(a.created).getTime()
         )
     }
 

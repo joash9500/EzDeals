@@ -79,7 +79,7 @@ VALUES (
     'Hey that looks amazing',
     1,
     null,
-    CURRENT_DATE,
+    CURRENT_TIMESTAMP,
     1
 );
 
@@ -88,7 +88,7 @@ VALUES (
     'I agree!',
     2,
     1,
-    CURRENT_DATE,
+    CURRENT_TIMESTAMP,
     1
 );
 
@@ -97,7 +97,7 @@ VALUES (
     'Same it looks fantastic',
     3,
     1,
-    CURRENT_DATE,
+    CURRENT_TIMESTAMP,
     1
 );
 

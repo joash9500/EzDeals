@@ -16,7 +16,7 @@ router.get('/', (req, res) => {
 
 router.post('/', (req, res) => {
     const data = req.body.data
-    const sql = "INSERT INTO comments (body, users_id, parent_id, deal_id, created) VALUES ($1, $2, $3, $4, CURRENT_DATE) RETURNING id, created"
+    const sql = "INSERT INTO comments (body, users_id, parent_id, deal_id, created) VALUES ($1, $2, $3, $4, CURRENT_TIMESTAMP) RETURNING id, created"
     db.query(sql, [data.body, data.users_id, data.parent_id, data.deal_id]).then((db_res) => {
         console.log(db_res)
         res.json(db_res)
