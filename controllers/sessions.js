@@ -45,10 +45,12 @@ router.post('/', (req, res) => {
 
 //to check if session exists
 router.get('/', (req, res) => {
-    if (req.session == undefined) {
+    //check if session contains a user_id, otherwise user is not logged in as session user_id is not set yet
+    if (req.session.user_id == undefined) {
         res.status(400).json({msg: 'User is not logged in'})
+    } else {
+        res.json({sessionData: req.session})
     }
-    res.json({sessionData: req.session})
 })
 
 //to destroy sessions

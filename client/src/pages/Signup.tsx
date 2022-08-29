@@ -12,10 +12,6 @@ interface SignupData {
 }
 
 function Signup() {
-    //render a specific page if signed up or not signed up
-    const [Submit, setSubmit] = useState<boolean>(false)
-    //error message
-    const [ErrorMsg, setErrorMsg] = useState('')
 
     //initial signup values
     const initialValues: SignupData = {
@@ -26,6 +22,10 @@ function Signup() {
         password: ''
     }
 
+    //render a specific page if signed up or not signed up
+    const [Submit, setSubmit] = useState<boolean>(false)
+    //error message
+    const [ErrorMsg, setErrorMsg] = useState('')
     //inputs from sign up form
     const [values, setValues] = useState(initialValues)
 

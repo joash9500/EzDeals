@@ -73,6 +73,9 @@ function Navbar() {
         //user is NOT logged in
         setLoggedIn(false)
       }
+    }).catch((err) => {
+        //set up error message
+        console.log(err)
     })
   })
 
@@ -81,10 +84,14 @@ function Navbar() {
     navigate('/login')
   }
 
-  //destroy the session cookies
+  //destroy session cookies, redirect to home page
   const logout = () => {
     setLoggedIn(false)
-    axios.delete('/api/sessions').then((res) => console.log('session ended', res))
+    axios.delete('/api/sessions').then((res) => {
+      console.log('session ended', res)
+      //return to home page
+      navigate('/')
+    })
   }
 
   //styling for nav bar links

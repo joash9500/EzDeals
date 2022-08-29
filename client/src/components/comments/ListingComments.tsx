@@ -23,6 +23,14 @@ export type commentDataNew = {
     deal_id: number,
 }
 
+export type session = {
+    cookie: object,
+    email: string,
+    first_name: string,
+    user_id: number | null,
+    username: string
+}
+
 export interface commentProps {
     comment: commentData,
     replies: commentData[]
@@ -35,7 +43,15 @@ export interface addCommentProps {
 //props will be the userid
 export function ListingComments({itemData}:itemData) {
 
+    const initialSession = {
+        cookie: {}, 
+        email: '', 
+        first_name: '', 
+        user_id: null, 
+        username: ''
+    }
     const [backendComments, setBackendComments] = useState<commentData[] | []>([])
+    const [session, setSession] = useState<session>(initialSession)
 
     //get parent comments first before rendering child comments, note filter only works on arrays. parent comments have no parents (ie parent_id will be null)
     const rootComments = backendComments.filter(
@@ -57,21 +73,25 @@ export function ListingComments({itemData}:itemData) {
     const addComment = (text: string) => {
         // console.log('add comment', text, parent_id)
 
-        axios.get('/api/sessions').then((res) => {
-            const session = res.data
-            const user_id = session.sessionData.user_id
-            const username = session.sessionData.username
-            const deal_id = itemData.deal_id
+        if (session.user_id == null) {
+            //add code to disable comment
+            console.log('user is not logged in, could not add comment')
 
+        } else if (session.user_id) {
+
+            const user_id = session.user_id
+            const username = session.username
+            const deal_id = itemData.deal_id
+    
             const newCommentData:commentDataNew = {
                 body: text,
                 users_id: user_id,
                 parent_id: null,
                 deal_id: deal_id,
             }
-
+    
             console.log(newCommentData)
-
+    
             axios.post('/api/comments', {
                 data: newCommentData
             }).then((res) => {
@@ -87,7 +107,8 @@ export function ListingComments({itemData}:itemData) {
                 //update the page with the new comment that was added
                 setBackendComments([new_comment, ...backendComments])
             })
-        })
+        }
+      
     }
 
     //run once when mounting component
@@ -100,6 +121,14 @@ export function ListingComments({itemData}:itemData) {
             const comments = res.data
             console.log(comments)
             setBackendComments(comments)
+        })
+        
+        axios.get('/api/sessions').then((res) => {
+            const session:session = res.data.sessionData
+            setSession(session)
+        }).catch((err) => {
+            //set up error message...
+            console.log(err)
         })
     },[])
 
