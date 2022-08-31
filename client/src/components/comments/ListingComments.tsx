@@ -2,7 +2,7 @@ import { useState, useEffect } from "react"
 import axios from "axios"
 import ListingComment from "./ListingComment";
 import ListingCommentForm from "./ListingCommentForm";
-import { itemData } from "../ListingItem";
+import { allCommentsProps, session } from "../ListingItem";
 
 // set up interface for props to ListingComment
 export type commentData = {
@@ -23,35 +23,20 @@ export type commentDataNew = {
     deal_id: number,
 }
 
-export type session = {
-    cookie: object,
-    email: string,
-    first_name: string,
-    user_id: number | null,
-    username: string
-}
-
 export interface commentProps {
     comment: commentData,
-    replies: commentData[]
+    replies: commentData[],
+    session: session
 }  
 
 export interface addCommentProps {
     handleSubmit: (text: string) => void
 }
 
-//props will be the userid
-export function ListingComments({itemData}:itemData) {
+//sessionData will have the userid
+export function ListingComments({itemData, sessionData}: allCommentsProps) {
 
-    const initialSession = {
-        cookie: {}, 
-        email: '', 
-        first_name: '', 
-        user_id: null, 
-        username: ''
-    }
     const [backendComments, setBackendComments] = useState<commentData[] | []>([])
-    const [session, setSession] = useState<session>(initialSession)
 
     //get parent comments first before rendering child comments, note filter only works on arrays. parent comments have no parents (ie parent_id will be null)
     const rootComments = backendComments.filter(
@@ -71,16 +56,15 @@ export function ListingComments({itemData}:itemData) {
 
     //when adding a new comment, you're creating a new rootComment that can potentially have children (ie. reply comments) later
     const addComment = (text: string) => {
-        // console.log('add comment', text, parent_id)
 
-        if (session.user_id == null) {
+        if (sessionData.user_id == null) {
             //add code to disable comment
             console.log('user is not logged in, could not add comment')
 
-        } else if (session.user_id) {
+        } else if (sessionData.user_id) {
 
-            const user_id = session.user_id
-            const username = session.username
+            const user_id = sessionData.user_id
+            const username = sessionData.username
             const deal_id = itemData.deal_id
     
             const newCommentData:commentDataNew = {
@@ -107,8 +91,7 @@ export function ListingComments({itemData}:itemData) {
                 //update the page with the new comment that was added
                 setBackendComments([new_comment, ...backendComments])
             })
-        }
-      
+        } 
     }
 
     //run once when mounting component
@@ -122,21 +105,15 @@ export function ListingComments({itemData}:itemData) {
             console.log(comments)
             setBackendComments(comments)
         })
-        
-        axios.get('/api/sessions').then((res) => {
-            const session:session = res.data.sessionData
-            setSession(session)
-        }).catch((err) => {
-            //set up error message...
-            console.log(err)
-        })
     },[])
 
     return (
         <div className="comments">  
             <h4 className="comment-title">Comments</h4>
-            <div className="comment-form-title">Add Comment</div>
-            <ListingCommentForm handleSubmit={addComment}></ListingCommentForm>
+            {sessionData.user_id ? 
+                <ListingCommentForm handleSubmit={addComment}></ListingCommentForm> : 
+            null}
+
             <div className="comments-container">
                 {rootComments.map((rootComment) => {
                     const replies = getReplies(rootComment.id)
@@ -145,6 +122,7 @@ export function ListingComments({itemData}:itemData) {
                         key={rootComment.id}
                         comment={rootComment}
                         replies={replies}
+                        session={sessionData}
                     ></ListingComment>
                     )
                 }

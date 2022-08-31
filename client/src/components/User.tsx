@@ -2,13 +2,6 @@ import {useParams} from 'react-router-dom'
 import {useEffect, useState} from 'react'
 import axios from 'axios';
 
-// interface UserData {
-//     user_id: number,
-//     first_name: string,
-//     last_name: string,
-//     date_joined: Date,
-// }
-
 export function User() {
     //profile page
     const [msg, setMsg] = useState('');

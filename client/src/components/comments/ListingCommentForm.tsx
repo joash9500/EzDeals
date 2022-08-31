@@ -13,6 +13,7 @@ function ListingCommentForm({handleSubmit}: addCommentProps) {
 
     return (
         <form onSubmit={onSubmit}>
+            <div className="comment-form-title">Add Comment</div>
             <textarea className="comment-form-textarea" value={text} onChange={(e) => setText(e.target.value)}></textarea>
             <button className="comment-form-button" disabled={isTextareaDisabled}>Add Comment</button>
         </form>

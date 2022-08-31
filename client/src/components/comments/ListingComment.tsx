@@ -1,7 +1,15 @@
 import { commentProps } from "./ListingComments"
 import image from '../../img/user.png'
 
-function ListingComment({comment, replies}: commentProps) {
+function ListingComment({comment, replies, session}: commentProps) {
+
+    //set up controls for reply, edit and delete
+    const canReply = Boolean(session.user_id)
+    const canEdit = session.user_id === comment.users_id
+    const canDelete = session.user_id === comment.users_id
+
+    //format date
+    const createdAt = new Date(comment.created).toLocaleDateString()
     
     return (
         <div className="comment">
@@ -11,13 +19,13 @@ function ListingComment({comment, replies}: commentProps) {
             <div className="comment-right-part">
                 <div className="comment-content">
                     <div className="comment-author">{comment.username}</div>
-                    <div>{comment.created}</div>
+                    <div>{createdAt}</div>
                 </div>
                 <div className="comment-text">{comment.body}</div>
                 <div className="comment-actions">
-                    <div className="comment-action"> Reply</div>
-                    <div className="comment-action"> Edit</div>
-                    <div className="comment-action"> Delete</div>
+                    {canReply ? <div className="comment-action"> Reply</div> : null}
+                    {canEdit ? <div className="comment-action"> Edit</div> : null}
+                    {canDelete ? <div className="comment-action"> Delete</div> : null}
                 </div>
                 {replies.length > 0 && (
                     <div className="replies">
@@ -27,6 +35,7 @@ function ListingComment({comment, replies}: commentProps) {
                             key={reply.id} 
                             comment={reply}
                             replies={[]}
+                            session={session}
                         ></ListingComment>)
                         }
                         )}
