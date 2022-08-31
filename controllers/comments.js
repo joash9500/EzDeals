@@ -15,11 +15,21 @@ router.get('/', (req, res) => {
 })
 
 router.post('/', (req, res) => {
+    console.log(req.body)
     const data = req.body.data
     const sql = "INSERT INTO comments (body, users_id, parent_id, deal_id, created) VALUES ($1, $2, $3, $4, CURRENT_TIMESTAMP) RETURNING id, created"
     db.query(sql, [data.body, data.users_id, data.parent_id, data.deal_id]).then((db_res) => {
         console.log(db_res)
         res.json(db_res)
+    })
+})
+
+router.delete('/', (req, res) => {
+    console.log(req.body)
+    const id = req.body.id
+    const sql = "DELETE FROM comments WHERE id = $1"
+    db.query(sql, [id]).then((db_res) => {
+        res.json({msg: 'success', database: db_res})
     })
 })
 

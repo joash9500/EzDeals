@@ -1,7 +1,8 @@
 import { commentProps } from "./ListingComments"
 import image from '../../img/user.png'
+import axios from "axios"
 
-function ListingComment({comment, replies, session}: commentProps) {
+function ListingComment({comment, replies, session, deleteComment}: commentProps) {
 
     //set up controls for reply, edit and delete
     const canReply = Boolean(session.user_id)
@@ -25,7 +26,7 @@ function ListingComment({comment, replies, session}: commentProps) {
                 <div className="comment-actions">
                     {canReply ? <div className="comment-action"> Reply</div> : null}
                     {canEdit ? <div className="comment-action"> Edit</div> : null}
-                    {canDelete ? <div className="comment-action"> Delete</div> : null}
+                    {canDelete ? <div className="comment-action" onClick={() => deleteComment(comment.id)}> Delete</div> : null}
                 </div>
                 {replies.length > 0 && (
                     <div className="replies">
@@ -36,6 +37,7 @@ function ListingComment({comment, replies, session}: commentProps) {
                             comment={reply}
                             replies={[]}
                             session={session}
+                            deleteComment={deleteComment}
                         ></ListingComment>)
                         }
                         )}

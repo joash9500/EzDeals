@@ -26,7 +26,8 @@ export type commentDataNew = {
 export interface commentProps {
     comment: commentData,
     replies: commentData[],
-    session: session
+    session: session,
+    deleteComment: (comment_id: number) => void
 }  
 
 export interface addCommentProps {
@@ -62,20 +63,17 @@ export function ListingComments({itemData, sessionData}: allCommentsProps) {
             console.log('user is not logged in, could not add comment')
 
         } else if (sessionData.user_id) {
-
             const user_id = sessionData.user_id
             const username = sessionData.username
             const deal_id = itemData.deal_id
-    
+
             const newCommentData:commentDataNew = {
                 body: text,
                 users_id: user_id,
                 parent_id: null,
                 deal_id: deal_id,
             }
-    
-            console.log(newCommentData)
-    
+
             axios.post('/api/comments', {
                 data: newCommentData
             }).then((res) => {
@@ -92,6 +90,21 @@ export function ListingComments({itemData, sessionData}: allCommentsProps) {
                 setBackendComments([new_comment, ...backendComments])
             })
         } 
+    }
+
+
+    //reply, edit and delete functions
+    const deleteComment = (comment_id: number) => {
+        axios.delete('/api/comments', {
+            data: {
+                id: comment_id
+            }
+        }).then((res) => {
+
+
+        }).catch((err) => {{
+            console.log('error occured when deleting comment', err)
+        }})
     }
 
     //run once when mounting component
@@ -123,6 +136,7 @@ export function ListingComments({itemData, sessionData}: allCommentsProps) {
                         comment={rootComment}
                         replies={replies}
                         session={sessionData}
+                        deleteComment={deleteComment}
                     ></ListingComment>
                     )
                 }
