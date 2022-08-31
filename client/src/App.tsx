@@ -2,7 +2,7 @@ import './index.css'
 import Home from './pages/Home'
 import About from './pages/About';
 import Navbar from './components/Navbar';
-import {User} from './components/User';
+import {User} from './pages/User';
 import {Login} from './pages/Login';
 import Signup from './pages/Signup';
 import { AddListing } from './pages/AddListing';
@@ -11,7 +11,7 @@ import {
   Routes,
   Route,
 } from "react-router-dom";
-import ListingItem from './components/ListingItem';
+import ListingItem from './pages/ListingItem';
 
 function App() {
   return (

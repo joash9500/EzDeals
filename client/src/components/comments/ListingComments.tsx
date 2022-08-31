@@ -2,7 +2,7 @@ import { useState, useEffect } from "react"
 import axios from "axios"
 import ListingComment from "./ListingComment";
 import ListingCommentForm from "./ListingCommentForm";
-import { allCommentsProps, session } from "../ListingItem";
+import { allCommentsProps, session } from "../../pages/ListingItem";
 
 // set up interface for props to ListingComment
 export type commentData = {

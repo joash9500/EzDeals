@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { useLocation } from "react-router-dom"
-import {ListingComments} from "./comments/ListingComments"
-import { cardData } from "./Listings"
+import {ListingComments} from "../components/comments/ListingComments"
+import { cardData } from "../components/Listings"
 import axios from "axios"
 
 export type session = {

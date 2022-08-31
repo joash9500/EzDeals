@@ -1,6 +1,5 @@
 import { commentProps } from "./ListingComments"
 import image from '../../img/user.png'
-import axios from "axios"
 
 function ListingComment({comment, replies, session, deleteComment}: commentProps) {
 
