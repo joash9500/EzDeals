@@ -87,6 +87,11 @@ export function Listings() {
                         exp_date: listObj.expire_date,
                         aws_url: listObj.aws_url
                     }
+
+                    //format date
+                    const list_date = new Date(cardData.list_date).toLocaleDateString()
+                    const exp_date = new Date(cardData.exp_date).toLocaleDateString()
+
                     return (
                     <Grid item xs={12} sm={6} md={3} key={index}>
                         <Card sx={{ minWidth: 200}}>
@@ -108,10 +113,10 @@ export function Listings() {
                                 Current Price: {cardData.curr_price} 
                                 </Typography>
                                 <Typography variant="body2" color="text.secondary">
-                                Date Listed: {cardData.list_date} 
+                                Date Listed: {list_date} 
                                 </Typography>
                                 <Typography variant="body2" color="text.secondary">
-                                Expiry: {cardData.exp_date} 
+                                Expiry: {exp_date} 
                                 </Typography>
                             </CardContent>
                             </CardActionArea>
