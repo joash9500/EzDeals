@@ -39,9 +39,7 @@ export function Login() {
         const data = {email: values.email, password: values.password}
         axios.post('/api/sessions', data).then((resp) => {
             console.log(resp.data)
-            //clear input fields once logged in
-            // setEmail('')
-            // setPassword('')
+            //clear input fields after logging in
             setValues({email: '', password: ''})
             //redirect to home page
             navigate('/')

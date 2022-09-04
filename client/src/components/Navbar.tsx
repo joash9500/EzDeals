@@ -9,7 +9,7 @@ import {Typography} from '@mui/material';
 import { createTheme } from '@mui/material/styles';
 import { ThemeProvider } from '@mui/material/styles';
 
-
+//mui template code for navbar
 declare module '@mui/material/styles' {
   interface Theme {
     status: {
@@ -60,22 +60,19 @@ function Navbar() {
   const navigate = useNavigate()
   const [isLoggedIn, setLoggedIn] = useState<boolean>(false)
 
-
-  //check if session exists everytime this page loads.
+  //check if session exists when this page loads.
   useEffect(() => {
     axios.get('/api/sessions').then((res) => {
       const currentSession = res.data.sessionData
-      //check if cookie data 'email' exists, otherwise user is not logged in
-      if (currentSession.email !== undefined) {
-        //user is logged in
+
+      //check if cookie sessionData exists, otherwise user is not logged in
+      if (currentSession) {
         setLoggedIn(true)
-      } else {
-        //user is NOT logged in
-        setLoggedIn(false)
       }
+      setLoggedIn(false)
+
     }).catch((err) => {
-        //set up error message
-        console.log(err)
+      console.log('not logged in: ', err)
     })
   })
 

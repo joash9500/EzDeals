@@ -100,7 +100,13 @@ export function ListingComments({itemData, sessionData}: allCommentsProps) {
                 id: comment_id
             }
         }).then((res) => {
-
+            console.log('deleted comment', res)
+            //filter out the deleted comments and update
+            const updatedBackendComments = backendComments.filter((comment) => {
+                return comment.id !== comment_id
+            })
+            //update
+            setBackendComments(updatedBackendComments)
 
         }).catch((err) => {{
             console.log('error occured when deleting comment', err)
