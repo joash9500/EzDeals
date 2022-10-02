@@ -66,10 +66,11 @@ function Navbar() {
       const currentSession = res.data.sessionData
 
       //check if cookie sessionData exists, otherwise user is not logged in
-      if (currentSession) {
+      if (currentSession == undefined) {
+        setLoggedIn(false)
+      } else {
         setLoggedIn(true)
       }
-      setLoggedIn(false)
 
     }).catch((err) => {
       console.log('not logged in: ', err)

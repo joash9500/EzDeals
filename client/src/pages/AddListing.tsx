@@ -59,6 +59,7 @@ export function AddListing() {
             } else {
                 //get id from session
                 const user_id = currentSession.user_id
+
                 //make another request to server and post new listing
                 axios.post(`/api/listings/${user_id}/add`, newListing).then((res) => {
                     console.log("new listing added", res)

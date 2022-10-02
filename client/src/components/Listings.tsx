@@ -40,29 +40,46 @@ export interface cardData {
 
 export function Listings() {
     const navigate = useNavigate()
-    //set up functional states
+    //set up functional states. 
+    //initial list of deals. once only request hence '[]'
     const [dealList, setDealList] = useState<DealList[]>([])
 
-    //initial list of deals. once only request hence '[]'
+    // 1. get the listings that are active (ie not expired)
+    // 2. (1st promise) iterate over each listing using it's deal_id
+    // 3. (2nd promise - nested) fetch the image for the listing.
+    // 4. resolve all promises of each listing from the 2nd promise 
     useEffect(() => {
-        axios.get<DealList[]>('/api/listings/active').then((res) => { 
+        axios.get<DealList[]>('/api/listings/active')
+        .then((res) => {
             const listingData = res.data
-            for (const listing of listingData) {
-                let id = listing.deal_id
-                //when sending data WITHIN an axios get request, need to set up an {params: {data}}...cannot rely on just {object}
-                axios.get<URLData>('/api/images', {
-                    params: {
-                        deal_id: id
-                    }
-                }).then((res) => {
-                    // console.log('running api images response', res.data.url)
-                    const url = res.data.url
-                    //update the listing with the aws image url
-                    listing['aws_url'] = url
-                    setDealList(prevList => [listing, ...prevList])
+            //map wil return a list of promises
+            const promisesWithImgURL = listingData.map((listingObj) => {
+                let id = listingObj.deal_id
+                return (
+                    axios.get<URLData>('/api/images', {
+                            params: {
+                                deal_id: id
+                            }
+                        }
+                    )
+                )
+            }) 
+
+            Promise.all(promisesWithImgURL).then((resolvedPromises) => {
+                const ImgURLs = resolvedPromises.map((resolvedPromise) => resolvedPromise.data.url)
+
+                const listingWithImgURL = listingData.map((listingObj, index) => {
+                    listingObj.aws_url = ImgURLs[index]
+                    return listingObj
                 })
-            }
+
+                console.log(listingWithImgURL, 'version 2')
+
+                setDealList(listingWithImgURL)
+
+            }).catch(err => console.log(err))
         })
+
     }, [])
 
     const handleRedirect = (data: object) => {

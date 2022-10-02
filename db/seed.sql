@@ -116,7 +116,7 @@ VALUES (
 INSERT INTO deals_status (deal_id, deal_status) 
 VALUES (
     3,
-    FALSE
+    TRUE
 );
 
 
