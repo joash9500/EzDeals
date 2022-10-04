@@ -113,7 +113,7 @@ export function ListingComments({itemData, sessionData}: allCommentsProps) {
         }})
     }
 
-    //run once when mounting component
+    //run when the itemData changes
     useEffect(() => {
         axios.get('/api/comments', {
             params: {
@@ -124,7 +124,7 @@ export function ListingComments({itemData, sessionData}: allCommentsProps) {
             console.log(comments)
             setBackendComments(comments)
         })
-    },[])
+    },[itemData])
 
     return (
         <div className="comments">  
