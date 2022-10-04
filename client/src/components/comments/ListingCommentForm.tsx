@@ -1,13 +1,13 @@
 import React, { useState } from "react"
 import { addCommentProps } from "./ListingComments"
 
-function ListingCommentForm({handleSubmit}: addCommentProps) {
 
+function ListingCommentForm({addComment}: addCommentProps) {
     const [text, setText] = useState("")
     const isTextareaDisabled = text.length === 0
     const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
-        handleSubmit(text)
+        addComment(text)
         setText('')
     }
 

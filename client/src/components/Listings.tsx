@@ -47,12 +47,13 @@ export function Listings() {
     // 1. get the listings that are active (ie not expired)
     // 2. (1st promise) iterate over each listing using it's deal_id
     // 3. (2nd promise - nested) fetch the image for the listing.
-    // 4. resolve all promises of each listing from the 2nd promise 
+    // 4. resolve all promises of each listing in the 2nd promise 
     useEffect(() => {
+        // 1st promise
         axios.get<DealList[]>('/api/listings/active')
         .then((res) => {
             const listingData = res.data
-            //map wil return a list of promises
+            //2nd promise - map will return an array of promises
             const promisesWithImgURL = listingData.map((listingObj) => {
                 let id = listingObj.deal_id
                 return (
@@ -60,8 +61,7 @@ export function Listings() {
                             params: {
                                 deal_id: id
                             }
-                        }
-                    )
+                        })
                 )
             }) 
 
@@ -73,8 +73,6 @@ export function Listings() {
                     return listingObj
                 })
 
-                console.log(listingWithImgURL, 'version 2')
-
                 setDealList(listingWithImgURL)
 
             }).catch(err => console.log(err))
@@ -82,6 +80,7 @@ export function Listings() {
 
     }, [])
 
+    //redirect to listing page when card is clicked
     const handleRedirect = (data: object) => {
         console.log('clicked', data)
         navigate('/listing/item', {state: {

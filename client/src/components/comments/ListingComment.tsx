@@ -8,7 +8,7 @@ function ListingComment({comment, replies, session, deleteComment}: commentProps
     const canEdit = session.user_id === comment.users_id
     const canDelete = session.user_id === comment.users_id
 
-    //format date
+    //format date 
     const createdAt = new Date(comment.created).toLocaleDateString()
     
     return (

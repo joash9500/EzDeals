@@ -31,7 +31,7 @@ export interface commentProps {
 }  
 
 export interface addCommentProps {
-    handleSubmit: (text: string) => void
+    addComment: (text: string) => void
 }
 
 //sessionData will have the userid
@@ -109,7 +109,7 @@ export function ListingComments({itemData, sessionData}: allCommentsProps) {
             setBackendComments(updatedBackendComments)
 
         }).catch((err) => {{
-            console.log('error occured when deleting comment', err)
+            console.log('error occured deleting comment', err)
         }})
     }
 
@@ -130,7 +130,7 @@ export function ListingComments({itemData, sessionData}: allCommentsProps) {
         <div className="comments">  
             <h4 className="comment-title">Comments</h4>
             {sessionData.user_id ? 
-                <ListingCommentForm handleSubmit={addComment}></ListingCommentForm> : 
+                <ListingCommentForm addComment={addComment}></ListingCommentForm> : 
             null}
 
             <div className="comments-container">
