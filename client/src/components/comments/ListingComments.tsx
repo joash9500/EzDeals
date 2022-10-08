@@ -15,6 +15,12 @@ export type commentData = {
     username: string,
 }
 
+//set up for comment action buttons. null if not logged in
+export type commentActions = {
+    id: number,
+    type: string
+}
+
 //for new comments
 export type commentDataNew = {
     body: string,
@@ -36,8 +42,10 @@ export interface addCommentProps {
 
 //sessionData will have the userid
 export function ListingComments({itemData, sessionData}: allCommentsProps) {
-
+    //state to update comments from database
     const [backendComments, setBackendComments] = useState<commentData[] | []>([])
+    //state for comment actions - reply, edit, delete
+    const [commentActions, setCommentActions] = useState<commentActions | null >(null)
 
     //get parent comments first before rendering child comments, note filter only works on arrays. parent comments have no parents (ie parent_id will be null)
     const rootComments = backendComments.filter(
@@ -55,25 +63,18 @@ export function ListingComments({itemData, sessionData}: allCommentsProps) {
         )
     }
 
-    //when adding a new comment, you're creating a new rootComment that can potentially have children (ie. reply comments) later
+    //when adding a new comment, you're creating a new rootComment that can potentially have children (ie. reply comments)
     const addComment = (text: string) => {
-
-        if (sessionData.user_id == null) {
-            //add code to disable comment
-            console.log('user is not logged in, could not add comment')
-
-        } else if (sessionData.user_id) {
+        if (sessionData.user_id) {
             const user_id = sessionData.user_id
             const username = sessionData.username
             const deal_id = itemData.deal_id
-
             const newCommentData:commentDataNew = {
                 body: text,
                 users_id: user_id,
                 parent_id: null,
                 deal_id: deal_id,
             }
-
             axios.post('/api/comments', {
                 data: newCommentData
             }).then((res) => {
@@ -92,7 +93,6 @@ export function ListingComments({itemData, sessionData}: allCommentsProps) {
         } 
     }
 
-
     //reply, edit and delete functions
     const deleteComment = (comment_id: number) => {
         axios.delete('/api/comments', {
@@ -101,11 +101,11 @@ export function ListingComments({itemData, sessionData}: allCommentsProps) {
             }
         }).then((res) => {
             console.log('deleted comment', res)
-            //filter out the deleted comments and update
+            //filter out deleted comments and update
             const updatedBackendComments = backendComments.filter((comment) => {
                 return comment.id !== comment_id
             })
-            //update
+
             setBackendComments(updatedBackendComments)
 
         }).catch((err) => {{
@@ -113,7 +113,23 @@ export function ListingComments({itemData, sessionData}: allCommentsProps) {
         }})
     }
 
-    //run when the itemData changes
+    // const updateComment = (text: string, comment_id: number) => {
+    //     axios.put('/api/comments', {
+    //         data: {
+    //             id: comment_id,
+    //             comment: text
+    //         }
+    //     })
+    //     .then((res) => {
+    //         console.log('updated comment', res)
+
+    //         const updatedComments = backendComments.map((backendComment) => {
+    //             if (backendComment.)
+    //         })
+    //     })
+    // }
+
+    //mount when itemData changes (ie when a new listing is clicked on the homepage)
     useEffect(() => {
         axios.get('/api/comments', {
             params: {

@@ -33,4 +33,13 @@ router.delete('/', (req, res) => {
     })
 })
 
+router.put('/', (req, res) => {
+    console.log("update", req.body)
+    const data = req.body.data
+    const sql = "UPDATE comments SET body = $1 WHERE id = $2"
+    db.query(sql, [data.comment, data.comment_id]).then((db_res) => {
+        res.json({msg: 'update comment was sucessful', database: db_res})
+    })
+})
+
 module.exports = router

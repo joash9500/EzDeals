@@ -1,16 +1,18 @@
 import { commentProps } from "./ListingComments"
-import image from '../../img/user.png'
+import image from '../../img/user-icon.png'
 
 function ListingComment({comment, replies, session, deleteComment}: commentProps) {
-
     //set up controls for reply, edit and delete
     const canReply = Boolean(session.user_id)
     const canEdit = session.user_id === comment.users_id
     const canDelete = session.user_id === comment.users_id
-
+    // const replyID = parent_id ? parent_id : comment.id
     //format date 
     const createdAt = new Date(comment.created).toLocaleDateString()
-    
+
+    // const isEditing = commentActions.type === "editing"
+    // const isReplying = commentActions.type === "replying"
+
     return (
         <div className="comment">
             <div className="comment-image-container">
@@ -21,6 +23,10 @@ function ListingComment({comment, replies, session, deleteComment}: commentProps
                     <div className="comment-author">{comment.username}</div>
                     <div>{createdAt}</div>
                 </div>
+                {/* if editing, create an edit comment section */}
+                
+
+
                 <div className="comment-text">{comment.body}</div>
                 <div className="comment-actions">
                     {canReply ? <div className="comment-action"> Reply</div> : null}
