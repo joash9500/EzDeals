@@ -2,7 +2,8 @@ import { useState, useEffect } from "react"
 import axios from "axios"
 import ListingComment from "./ListingComment";
 import ListingCommentForm from "./ListingCommentForm";
-import { allCommentsProps, session } from "../../pages/ListingItem";
+import { session } from "../../pages/ListingItem";
+import { cardData } from "../Listings";
 
 // set up interface for props to ListingComment
 export type commentData = {
@@ -15,9 +16,9 @@ export type commentData = {
     username: string,
 }
 
-//set up for comment action buttons. null if not logged in
+//set up comment action buttons. null if not logged in
 export type commentActions = {
-    id: number,
+    comment_id: number,
     type: string
 }
 
@@ -29,22 +30,33 @@ export type commentDataNew = {
     deal_id: number,
 }
 
+export interface allCommentsProps {
+    itemData: cardData,
+    sessionData: session
+}
+
 export interface commentProps {
     comment: commentData,
     replies: commentData[],
     session: session,
-    deleteComment: (comment_id: number) => void
+    addComment: (text: string, reply_id: number) => void,
+    deleteComment: (comment_id: number) => void,
+    commentActions: commentActions | null,
+    setCommentActions: (action: commentActions) => void,
+    parent_id: null | number
 }  
 
 export interface addCommentProps {
-    addComment: (text: string) => void
+    commentFormTitle: string,
+    reply_id: number | null,
+    submitHandler: (text: string, reply_id: number) => void
 }
 
 //sessionData will have the userid
 export function ListingComments({itemData, sessionData}: allCommentsProps) {
     //state to update comments from database
     const [backendComments, setBackendComments] = useState<commentData[] | []>([])
-    //state for comment actions - reply, edit, delete
+    //state to store data for replying and editing
     const [commentActions, setCommentActions] = useState<commentActions | null >(null)
 
     //get parent comments first before rendering child comments, note filter only works on arrays. parent comments have no parents (ie parent_id will be null)
@@ -64,7 +76,7 @@ export function ListingComments({itemData, sessionData}: allCommentsProps) {
     }
 
     //when adding a new comment, you're creating a new rootComment that can potentially have children (ie. reply comments)
-    const addComment = (text: string) => {
+    const addComment = (text: string, reply_id: number) => {
         if (sessionData.user_id) {
             const user_id = sessionData.user_id
             const username = sessionData.username
@@ -107,7 +119,6 @@ export function ListingComments({itemData, sessionData}: allCommentsProps) {
             })
 
             setBackendComments(updatedBackendComments)
-
         }).catch((err) => {{
             console.log('error occured deleting comment', err)
         }})
@@ -146,7 +157,7 @@ export function ListingComments({itemData, sessionData}: allCommentsProps) {
         <div className="comments">  
             <h4 className="comment-title">Comments</h4>
             {sessionData.user_id ? 
-                <ListingCommentForm addComment={addComment}></ListingCommentForm> : 
+                <ListingCommentForm submitHandler={addComment} commentFormTitle="Add Comment" reply_id={null}></ListingCommentForm> : 
             null}
 
             <div className="comments-container">
@@ -158,7 +169,11 @@ export function ListingComments({itemData, sessionData}: allCommentsProps) {
                         comment={rootComment}
                         replies={replies}
                         session={sessionData}
+                        addComment={addComment}
                         deleteComment={deleteComment}
+                        commentActions={commentActions}
+                        setCommentActions={setCommentActions}
+                        parent_id={rootComment.id}
                     ></ListingComment>
                     )
                 }

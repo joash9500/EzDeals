@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react"
 import { useLocation } from "react-router-dom"
 import {ListingComments} from "../components/comments/ListingComments"
-import { cardData } from "../components/Listings"
 import axios from "axios"
 
 export type session = {
@@ -10,11 +9,6 @@ export type session = {
     first_name: string,
     user_id: number | null,
     username: string
-}
-
-export interface allCommentsProps {
-    itemData: cardData,
-    sessionData: session
 }
 
 function ListingItem() {
