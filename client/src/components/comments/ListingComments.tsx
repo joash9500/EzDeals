@@ -26,7 +26,7 @@ export type commentActions = {
 export type commentDataNew = {
     body: string,
     users_id: number,
-    parent_id: null,
+    parent_id: number | null,
     deal_id: number,
 }
 
@@ -39,7 +39,7 @@ export interface commentProps {
     comment: commentData,
     replies: commentData[],
     session: session,
-    addComment: (text: string, reply_id: number) => void,
+    addComment: (text: string, reply_id: number | null) => void,
     deleteComment: (comment_id: number) => void,
     commentActions: commentActions | null,
     setCommentActions: (action: commentActions) => void,
@@ -48,8 +48,8 @@ export interface commentProps {
 
 export interface addCommentProps {
     commentFormTitle: string,
-    reply_id: number | null,
-    submitHandler: (text: string, reply_id: number) => void
+    reply_id: null | number,
+    submitHandler: (text: string, reply_id: number | null) => void
 }
 
 //sessionData will have the userid
@@ -76,7 +76,7 @@ export function ListingComments({itemData, sessionData}: allCommentsProps) {
     }
 
     //when adding a new comment, you're creating a new rootComment that can potentially have children (ie. reply comments)
-    const addComment = (text: string, reply_id: number) => {
+    const addComment = (text: string, reply_id: number | null) => {
         if (sessionData.user_id) {
             const user_id = sessionData.user_id
             const username = sessionData.username
@@ -84,7 +84,7 @@ export function ListingComments({itemData, sessionData}: allCommentsProps) {
             const newCommentData:commentDataNew = {
                 body: text,
                 users_id: user_id,
-                parent_id: null,
+                parent_id: reply_id,
                 deal_id: deal_id,
             }
             axios.post('/api/comments', {
@@ -164,6 +164,8 @@ export function ListingComments({itemData, sessionData}: allCommentsProps) {
                 {rootComments.map((rootComment) => {
                     const replies = getReplies(rootComment.id)
                     return (
+                    // parent_id is null as these are root comments!
+                    //note replies are being sent to the component as well
                     <ListingComment 
                         key={rootComment.id}
                         comment={rootComment}
@@ -173,7 +175,7 @@ export function ListingComments({itemData, sessionData}: allCommentsProps) {
                         deleteComment={deleteComment}
                         commentActions={commentActions}
                         setCommentActions={setCommentActions}
-                        parent_id={rootComment.id}
+                        parent_id={null}
                     ></ListingComment>
                     )
                 }

@@ -2,12 +2,12 @@ import { commentProps } from "./ListingComments"
 import image from '../../img/user-icon.png'
 import ListingCommentForm from "./ListingCommentForm"
 
-function ListingComment({comment, replies, session, addComment, deleteComment, commentActions, setCommentActions, parent_id}: commentProps) {
+function ListingComment({comment, replies, session, addComment, deleteComment, commentActions, setCommentActions, parent_id = null}: commentProps) {
     //set up controls for reply, edit and delete
     const canReply = Boolean(session.user_id)
     const canEdit = session.user_id === comment.users_id
     const canDelete = session.user_id === comment.users_id
-    //note parent_id is null by default (in parent component ListingComments)
+    //note parent_id is set to null by default for ListingComment, unless its updated otherwise in the PARENT ListingComments
     const reply_id = parent_id ? parent_id : comment.id
     //format date 
     const createdAt = new Date(comment.created).toLocaleDateString()
@@ -50,7 +50,7 @@ function ListingComment({comment, replies, session, addComment, deleteComment, c
                             deleteComment={deleteComment}
                             commentActions={commentActions}
                             setCommentActions={setCommentActions}
-                            parent_id={null}
+                            parent_id={comment.id}
                         ></ListingComment>)
                         }
                         )}

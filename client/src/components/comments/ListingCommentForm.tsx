@@ -5,12 +5,11 @@ function ListingCommentForm({submitHandler, commentFormTitle, reply_id}: addComm
     const [text, setText] = useState("")
     const isTextareaDisabled = text.length === 0
     const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+        console.log(reply_id)
         event.preventDefault()
-        //handle null case for reply_id
-        if (reply_id !== null) {
-            submitHandler(text, reply_id)
-            setText('')
-        } 
+        //reply_id is actually the parent_id which may be null or a number
+        submitHandler(text, reply_id)
+        setText('')
     }
 
     return (
