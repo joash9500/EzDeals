@@ -87,6 +87,7 @@ export function ListingComments({itemData, sessionData}: allCommentsProps) {
                 parent_id: reply_id,
                 deal_id: deal_id,
             }
+
             axios.post('/api/comments', {
                 data: newCommentData
             }).then((res) => {
@@ -151,7 +152,7 @@ export function ListingComments({itemData, sessionData}: allCommentsProps) {
             console.log(comments)
             setBackendComments(comments)
         })
-    },[itemData])
+    },[backendComments])
 
     return (
         <div className="comments">  
@@ -164,7 +165,7 @@ export function ListingComments({itemData, sessionData}: allCommentsProps) {
                 {rootComments.map((rootComment) => {
                     const replies = getReplies(rootComment.id)
                     return (
-                    // parent_id is null as these are root comments!
+                    //parent_id is null as these are root comments!
                     //note replies are being sent to the component as well
                     <ListingComment 
                         key={rootComment.id}
