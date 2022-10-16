@@ -133,7 +133,7 @@ export function ListingComments({itemData, sessionData}: allCommentsProps) {
     const updateComment = (text: string, comment_id: number | null) => {
         axios.put('/api/comments', {
             data: {
-                id: comment_id,
+                comment_id: comment_id,
                 comment: text
             }
         })
