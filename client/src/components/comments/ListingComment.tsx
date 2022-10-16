@@ -2,12 +2,12 @@ import { commentProps } from "./ListingComments"
 import image from '../../img/user-icon.png'
 import ListingCommentForm from "./ListingCommentForm"
 
-function ListingComment({comment, replies, session, addComment, deleteComment, commentActions, setCommentActions, parent_id = null}: commentProps) {
+function ListingComment({comment, replies, session, addComment, deleteComment, updateComment, commentActions, setCommentActions, parent_id}: commentProps) {
     //set up controls for reply, edit and delete
     const canReply = Boolean(session.user_id)
     const canEdit = session.user_id === comment.users_id
     const canDelete = session.user_id === comment.users_id
-    //note parent_id is set to null by default for ListingComment, unless its updated otherwise in the PARENT ListingComments
+    //note parent_id is null or a number. this keeps comments to just 2 levels (for rootcomment and replies)
     const reply_id = parent_id ? parent_id : comment.id
     //format date 
     const createdAt = new Date(comment.created).toLocaleDateString()
@@ -26,15 +26,35 @@ function ListingComment({comment, replies, session, addComment, deleteComment, c
                     <div>{createdAt}</div>
                 </div>
 
-                <div className="comment-text">{comment.body}</div>
+                {/* if not editing, just show the comment */}
+                {!isEditing ? <div className="comment-text">{comment.body}</div> : null}
+                {/* if editing, show comment form instead of comment */}
+                {isEditing ? <ListingCommentForm 
+                    submitLabel="Edit Comment" 
+                    submitHandler={updateComment} 
+                    comment_id={comment.id} 
+                    hasCancelButton={true} 
+                    initialText={comment.body}
+                    cancelHandler={() => setCommentActions(null)}
+                    ></ListingCommentForm> 
+                    : null}
+
                 <div className="comment-actions">
                     {canReply ? <div className="comment-action" onClick={() => setCommentActions({comment_id: comment.id, type: 'replying'})}> Reply</div> : null}
                     {canEdit ? <div className="comment-action" onClick={() => setCommentActions({comment_id: comment.id, type: 'editing'})}> Edit</div> : null}
-                    {canDelete ? <div className="comment-action" onClick={() => deleteComment(comment.id)}> Delete</div> : null}
+                    {canDelete ? <div className="comment-action" onClick={() => deleteComment(comment.id)}>Delete</div> : null}
                 </div>
 
-                {/* generate a reply form if the user isReplying. this re-uses the listing comment form */}
-                {isReplying ? <ListingCommentForm submitLabel="Reply" submitHandler={addComment} reply_id={reply_id}></ListingCommentForm> : null}
+                {/* generate a reply form if the user is replying. this re-uses the listing comment form */}
+                {isReplying ? <ListingCommentForm 
+                    submitLabel="Reply" 
+                    submitHandler={addComment} 
+                    comment_id={reply_id} 
+                    hasCancelButton={false} 
+                    initialText={""}
+                    cancelHandler={() => setCommentActions(null)}
+                    ></ListingCommentForm> 
+                    : null}
 
                 {replies.length > 0 && (
                     <div className="replies">
@@ -47,6 +67,7 @@ function ListingComment({comment, replies, session, addComment, deleteComment, c
                             session={session}
                             addComment={addComment}
                             deleteComment={deleteComment}
+                            updateComment={updateComment}
                             commentActions={commentActions}
                             setCommentActions={setCommentActions}
                             parent_id={comment.id}
