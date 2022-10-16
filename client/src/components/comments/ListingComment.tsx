@@ -11,7 +11,6 @@ function ListingComment({comment, replies, session, addComment, deleteComment, c
     const reply_id = parent_id ? parent_id : comment.id
     //format date 
     const createdAt = new Date(comment.created).toLocaleDateString()
-
     //check if commentActions is null first before checking type
     const isEditing = commentActions && commentActions.comment_id === comment.id && commentActions.type === "editing"
     const isReplying = commentActions && commentActions.comment_id === comment.id && commentActions.type === "replying"
@@ -35,7 +34,7 @@ function ListingComment({comment, replies, session, addComment, deleteComment, c
                 </div>
 
                 {/* generate a reply form if the user isReplying. this re-uses the listing comment form */}
-                {isReplying ? <ListingCommentForm commentFormTitle="Reply" submitHandler={addComment} reply_id={reply_id}></ListingCommentForm> : null}
+                {isReplying ? <ListingCommentForm submitLabel="Reply" submitHandler={addComment} reply_id={reply_id}></ListingCommentForm> : null}
 
                 {replies.length > 0 && (
                     <div className="replies">

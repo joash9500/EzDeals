@@ -47,7 +47,7 @@ export interface commentProps {
 }  
 
 export interface addCommentProps {
-    commentFormTitle: string,
+    submitLabel: string,
     reply_id: null | number,
     submitHandler: (text: string, reply_id: number | null) => void
 }
@@ -91,11 +91,12 @@ export function ListingComments({itemData, sessionData}: allCommentsProps) {
             axios.post('/api/comments', {
                 data: newCommentData
             }).then((res) => {
+                console.log('new comment added', res)
                 const new_comment:commentData = {
                     id: res.data.rows[0].id,
                     body: text,
                     users_id: user_id,
-                    parent_id: null,
+                    parent_id: res.data.rows[0].parent_id,
                     created: res.data.rows[0].created,
                     deal_id: deal_id,
                     username: username,
@@ -141,7 +142,7 @@ export function ListingComments({itemData, sessionData}: allCommentsProps) {
     //     })
     // }
 
-    //mount when itemData changes (ie when a new listing is clicked on the homepage)
+    //mount once
     useEffect(() => {
         axios.get('/api/comments', {
             params: {
@@ -151,14 +152,14 @@ export function ListingComments({itemData, sessionData}: allCommentsProps) {
             const comments = res.data
             console.log(comments)
             setBackendComments(comments)
-        })
-    },[backendComments])
+        }) 
+    },[])
 
     return (
         <div className="comments">  
             <h4 className="comment-title">Comments</h4>
             {sessionData.user_id ? 
-                <ListingCommentForm submitHandler={addComment} commentFormTitle="Add Comment" reply_id={null}></ListingCommentForm> : 
+                <ListingCommentForm submitHandler={addComment} submitLabel="Add Comment" reply_id={null}></ListingCommentForm> : 
             null}
 
             <div className="comments-container">
