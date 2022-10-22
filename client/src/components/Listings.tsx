@@ -67,7 +67,6 @@ export function Listings() {
 
             Promise.all(promisesWithImgURL).then((resolvedPromises) => {
                 const ImgURLs = resolvedPromises.map((resolvedPromise) => resolvedPromise.data.url)
-
                 const listingWithImgURL = listingData.map((listingObj, index) => {
                     listingObj.aws_url = ImgURLs[index]
                     return listingObj
@@ -91,26 +90,26 @@ export function Listings() {
     return (
         <div>
             <h1 className="title">Home</h1>
-            <Grid container spacing={4} alignItems="center" justifyContent="center" padding="20px">
+            <Grid container spacing={4} alignItems="stretch" padding="20px">
                 {dealList.map((listObj, index) => {
+
+                    //format date
+                    const list_date = new Date(listObj.list_date).toLocaleDateString()
+                    const exp_date = new Date(listObj.expire_date).toLocaleDateString()
                     
                     const cardData: cardData = {
                         deal_id: listObj.id,
                         name: listObj.deal_name,
                         seller: listObj.seller,
                         curr_price: listObj.current_price,
-                        list_date: listObj.list_date,
-                        exp_date: listObj.expire_date,
+                        list_date: list_date,
+                        exp_date: exp_date,
                         aws_url: listObj.aws_url
                     }
 
-                    //format date
-                    const list_date = new Date(cardData.list_date).toLocaleDateString()
-                    const exp_date = new Date(cardData.exp_date).toLocaleDateString()
-
                     return (
-                    <Grid item xs={12} sm={6} md={3} key={index}>
-                        <Card sx={{ minWidth: 200}}>
+                    <Grid item style={{display: 'flex'}} xs={12} sm={6} md={3} key={index}>
+                        <Card sx={{ minWidth: 200}} style={{display: 'flex', justifyContent: 'space-between', flexDirection: 'column', width: '100%'}}>
                             <CardActionArea onClick={() => handleRedirect(cardData)} >
                             <CardMedia
                                 component="img"
@@ -126,13 +125,13 @@ export function Listings() {
                                 Seller: {cardData.seller} 
                                 </Typography>
                                 <Typography variant="body2" color="text.secondary">
-                                Current Price: {cardData.curr_price} 
+                                Rating: {cardData.curr_price} 
                                 </Typography>
                                 <Typography variant="body2" color="text.secondary">
-                                Date Listed: {list_date} 
+                                Date posted: {list_date} 
                                 </Typography>
                                 <Typography variant="body2" color="text.secondary">
-                                Expiry: {exp_date} 
+                                Expires on: {exp_date} 
                                 </Typography>
                             </CardContent>
                             </CardActionArea>

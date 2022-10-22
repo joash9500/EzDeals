@@ -43,9 +43,8 @@ function ListingItem() {
                 <h1>{itemData.name}</h1>
                 <img src={itemData.aws_url}></img>
                 <h3>{itemData.seller}</h3>
-                <h3>{itemData.curr_price}</h3>
-                <h3>{itemData.list_date}</h3>
-                <h3>{itemData.curr_price}</h3>
+                <h3>$ {itemData.curr_price}</h3>
+                <h3>Posted on: {itemData.list_date}</h3>
             </div>
             {/* send the item data as prop to comments - to update the database later */}
             <ListingComments itemData={itemData} sessionData={session}></ListingComments>
