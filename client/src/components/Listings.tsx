@@ -109,7 +109,7 @@ export function Listings() {
 
                     return (
                     <Grid item style={{display: 'flex'}} xs={12} sm={6} md={3} key={index}>
-                        <Card sx={{ minWidth: 200}} style={{display: 'flex', justifyContent: 'space-between', flexDirection: 'column', width: '100%'}}>
+                        <Card sx={{ minWidth: 200}} style={{ width: '100%'}}>
                             <CardActionArea onClick={() => handleRedirect(cardData)} >
                             <CardMedia
                                 component="img"
