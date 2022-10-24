@@ -1,12 +1,8 @@
 import axios from "axios"
-import {useState, useEffect} from 'react'
+import {useState, useEffect, ChangeEvent} from 'react'
 import { useNavigate } from "react-router-dom";
 
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Typography from '@mui/material/Typography';
-import { CardActionArea, Grid } from '@mui/material';
+import {Card, CardContent, CardMedia, Typography, CardActionArea, Grid, CardActions, Button, IconButton, IconButtonProps} from '@mui/material'
 
 interface DealList {
     id: number,
@@ -41,8 +37,9 @@ export interface cardData {
 export function Listings() {
     const navigate = useNavigate()
     //set up functional states. 
-    //initial list of deals. once only request hence '[]'
+    //initial empty list of deals.
     const [dealList, setDealList] = useState<DealList[]>([])
+    const [voteCount, setVoteCount] = useState<number>(0)
 
     // 1. get the listings that are active (ie not expired)
     // 2. (1st promise) iterate over each listing using it's deal_id
@@ -109,15 +106,15 @@ export function Listings() {
 
                     return (
                     <Grid item style={{display: 'flex'}} xs={12} sm={6} md={3} key={index}>
-                        <Card sx={{ minWidth: 200}} style={{ width: '100%'}}>
-                            <CardActionArea onClick={() => handleRedirect(cardData)} >
+                        <Card sx={{ minWidth: 200}} style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', width: '100%'}}>
+                            <CardActionArea onClick={() => handleRedirect(cardData)}>
                             <CardMedia
                                 component="img"
                                 height="180"
                                 image={cardData.aws_url}
                                 alt="amazon s3 is not working!!!"
                             />
-                            <CardContent sx={{flexDirection: 'column', justifyContent: 'space-between'}}>
+                            <CardContent>
                                 <Typography gutterBottom variant="h5" component="div" className="card-title">
                                 {cardData.name}
                                 </Typography>
@@ -135,6 +132,17 @@ export function Listings() {
                                 </Typography>
                             </CardContent>
                             </CardActionArea>
+                            <CardActions>
+                                <Button onClick={() => setVoteCount(voteCount+1)}>
+                                    +
+                                </Button>
+                                <Button>
+                                    -
+                                </Button>
+                                <Typography>
+                                    {voteCount}
+                                </Typography>
+                            </CardActions>
                         </Card>
                     </Grid>   
                     )
