@@ -61,7 +61,7 @@ router.post('/', upload.single('image'), async (req, res) => {
     //save the image file into database, after its been served to the AMAZON s3 cloud server
     const deal_id = req.body.deal_id
     
-    const sql = 'UPDATE deals SET image_name = $1 WHERE id = $2'
+    const sql = 'UPDATE deal SET image_key = $1 WHERE deal_id = $2'
     db.query(sql, [imageName, deal_id]).then((dbRes) => {
         res.json({msg: 'image uploaded to amazon s3 ga-project4 and updated image name' + imageName + 'for ' + deal_id + ' in psql database', dbRes})
     })
@@ -70,13 +70,13 @@ router.post('/', upload.single('image'), async (req, res) => {
 router.get('/', async (req, res) => {
     // console.log(req.query.deal_id)
     const deal_id = req.query.deal_id
-    const sql = 'SELECT image_name FROM deals WHERE id = $1'
-    const imageName = await db.query(sql, [deal_id]).catch((err) => {
+    const sql = 'SELECT image_key FROM deal WHERE deal_id = $1'
+    const imageKeyFromDB = await db.query(sql, [deal_id]).catch((err) => {
         res.json({msg: err})
     })
 
     // console.log(imageName.rows[0].image_name)
-    const imageKey = imageName.rows[0].image_name
+    const imageKey = imageKeyFromDB.rows[0].image_key
 
     const getObjectParams = {
         Bucket: bucketName,

@@ -17,6 +17,7 @@ router.post('/', (req, res) => {
     const {email, password} = req.body
     const sql = 'SELECT * FROM users WHERE email = $1'
     db.query(sql, [email]).then((dbRes) => {
+        console.log(dbRes.rows[0])
         const userData = dbRes.rows[0]
 
         if (userData == undefined) {
@@ -27,7 +28,7 @@ router.post('/', (req, res) => {
             //if password checks returns true
             if (password_check) {
                 // set the session for user
-                req.session.user_id = userData.id
+                req.session.users_id = userData.users_id
                 req.session.first_name = userData.first_name
                 req.session.username = userData.username
                 req.session.email = userData.email
@@ -46,8 +47,8 @@ router.post('/', (req, res) => {
 //to check if session exists
 router.get('/', (req, res) => {
     //check if session contains a user_id, otherwise user is not logged in as session user_id is not set yet
-    if (req.session.user_id == undefined) {
-        res.status(400).json({msg: 'User is not logged in'})
+    if (req.session.users_id == undefined) {
+        res.status(400).json({msg: 'user is not logged in'})
     } else {
         res.json({sessionData: req.session})
     }

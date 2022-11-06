@@ -3,7 +3,7 @@ import axios from "axios"
 import ListingComment from "./ListingComment";
 import ListingCommentForm from "./ListingCommentForm";
 import { session } from "../../pages/ListingItem";
-import { cardData } from "../Listings";
+import { dealList } from "../Listings";
 
 // set up interface for props to ListingComment
 export type commentData = {
@@ -31,7 +31,7 @@ export type commentDataNew = {
 }
 
 export interface allCommentsProps {
-    itemData: cardData,
+    itemData: dealList,
     sessionData: session
 }
 

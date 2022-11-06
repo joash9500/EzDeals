@@ -7,12 +7,11 @@ import { UploadFile } from '@mui/icons-material'
 import {useNavigate} from 'react-router-dom'
 
 interface AddListing {
-    deal_name: string,
-    seller: string,
-    current_price: number | "",
-    original_price: number | "",
-    expire_date: string | null,
-    delivery_type: string,
+    title: string,
+    summary: string,
+    url_link: string,
+    start_date: string | null,
+    end_date: string | null
 }
 
 export function AddListing() {
@@ -24,26 +23,22 @@ export function AddListing() {
 
     //inputs for add listing form
     const [DealName, setDealName] = useState<string>('')
-    const [Seller, setSeller] = useState<string>('')
-    const [CurrentPrice, setCurrentPrice] = useState<number | ''>('')
-    const [OriginalPrice, setOriginalPrice] = useState<number | ''>('')
-    // Listing Date is automatically set with the CURRENT_DATE executed in the listing.js (server sde)
-    const [ExpireDate, setExpireDate] = useState<string | null>('')
-    //Delivery type is either online or physical. NOTE, we had to initialise a value here e.g. 'online' otherwise its always an empty string ''
-    const [DeliveryType, setDeliveryType] = useState<string>('')
-
+    const [Summary, setSummary] = useState<string>('')
+    const [URL, setURL] = useState<string>('')
+    // Listing Date is automatically set with the CURRENT_DATE executed in the listing.js (server side)
+    const [StartDate, setStartDate] = useState<string | null>('') 
+    const [EndDate, setEndDate] = useState<string | null>('')
     //For image uploads, which will eventually go into the AMAZON s3 cloud server (NOT psql database). NOTE formData can only take Blob or string types as input
     const [ImageFile, setImageFile] = useState<Blob | string>('')
     const [Filename, setFilename] = useState<string>('')
 
     //store new post listing data into an object
     const newListing : AddListing = {
-        deal_name: DealName,
-        seller: Seller,
-        current_price: CurrentPrice,
-        original_price: OriginalPrice,
-        expire_date: ExpireDate,
-        delivery_type: DeliveryType
+        title: DealName,
+        summary: Summary,
+        url_link: URL,
+        start_date: StartDate,
+        end_date: EndDate,
     }
 
     //form handler
@@ -53,15 +48,16 @@ export function AddListing() {
 
         axios.get('/api/sessions').then((res) => {
             const currentSession = res.data.sessionData
-            if (currentSession.user_id == undefined) {
-                setErrorMsg('Not Logged in. Cannot add new listing')
+            if (currentSession.users_id == undefined) {
+                setErrorMsg('not logged in. cannot add new listing')
                 return
             } else {
                 //get id from session
-                const user_id = currentSession.user_id
+                const users_id = currentSession.users_id
+                console.log('adding new deal', users_id, newListing)
 
                 //make another request to server and post new listing
-                axios.post(`/api/listings/${user_id}/add`, newListing).then((res) => {
+                axios.post(`/api/listings/${users_id}/add`, newListing).then((res) => {
                     console.log("new listing added", res)
                     //update the deals_status table
                     const new_deal_id = {
@@ -107,7 +103,6 @@ export function AddListing() {
                 <Grid container spacing={2} marginTop={0} justifyContent="center">
                 <Typography variant='h4' margin="10px">Add New Deal</Typography>
                     <Grid item xs={12}>
-                    
                         <TextField
                             required
                             fullWidth
@@ -117,88 +112,57 @@ export function AddListing() {
                             value={DealName} 
                             onChange={(e) => setDealName(e.target.value)}
                         ></TextField>
-   
                     </Grid>
+
                     <Grid item xs={12}>
-      
                         <TextField
                            required
                            fullWidth
                             variant="outlined"
-                            label="Seller"
-                            name="seller"
-                            value={Seller} 
-                            onChange={(e) => setSeller(e.target.value)}
+                            label="Summary"
+                            name="summary"
+                            value={Summary} 
+                            onChange={(e) => setSummary(e.target.value)}
                         ></TextField>
-              
                     </Grid>
+
                     <Grid item xs={12}>
-   
-                        <TextField
-                           required
-                           fullWidth
-                            inputProps={{ inputMode: 'numeric', pattern: '[0-9]*'}}
-                            variant="outlined"
-                            label="Current Price"
-                            name="current_price"
-                            value={CurrentPrice} 
-                            onChange={(e) => {
-                                const inputAsNumber = parseInt(e.target.value)
-                                console.log(inputAsNumber)
-                                //check NaN or empty case before updating
-                                if (isNaN(inputAsNumber)) {
-                                    return setCurrentPrice('')
-                                } 
-                                setCurrentPrice(inputAsNumber)
-                        }}></TextField>
-              
-                    </Grid>
-                    <Grid item xs={12}>
-          
                         <TextField
                             required
                             fullWidth
-                            inputProps={{ inputMode: 'numeric', pattern: '[0-9]*'}}
                             variant="outlined"
-                            label="Original Price"
-                            name="original_price"
-                            value={OriginalPrice} 
-                            onChange={(e) => {
-                                const inputAsNumber = parseInt(e.target.value)
-                                //check NaN or empty case before updating
-                                if (isNaN(inputAsNumber)) {
-                                    return setOriginalPrice('')
-                                } 
-                                setOriginalPrice(inputAsNumber)
-                        }}></TextField>
-
+                            label="URL Link to Deal"
+                            name="url_link"
+                            value={URL} 
+                            onChange={(e) => setURL(e.target.value)}
+                        ></TextField>
                     </Grid>
+                  
                     <Grid item xs={4} style={{display: 'flex', flexDirection: 'column', alignContent: 'center'}}>
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
                         <DatePicker         
-                            label="Expiry Date"
-                            value={ExpireDate} 
-                            onChange={(newValue: string | null) => 
-                                {setExpireDate(newValue)
+                            label="Starts"
+                            value={StartDate} 
+                            onChange={(newValue: string | null) => {
+                                    setStartDate(newValue)
                                 }}
                             renderInput={(params) => <TextField name='expire_date' {...params}></TextField>}
                         ></DatePicker>
                     </LocalizationProvider>
                     </Grid>
                     <Grid item xs={4} style={{display: 'flex', flexDirection: 'column', alignContent: 'center'}}>
-                    <TextField
-                        required
-                        fullWidth
-                        variant='outlined'
-                        select
-                        value={DeliveryType}
-                        onChange={(e) => setDeliveryType(e.target.value)}
-                        label="Delivery Type"
-                    >
-                        <MenuItem value={'physical'}>Physical</MenuItem>
-                        <MenuItem value={'online'}>Online</MenuItem>
-                    </TextField>
+                    <LocalizationProvider dateAdapter={AdapterDateFns}>
+                        <DatePicker         
+                            label="Ends"
+                            value={EndDate} 
+                            onChange={(newValue: string | null) => {
+                                    setEndDate(newValue)
+                                }}
+                            renderInput={(params) => <TextField name='expire_date' {...params}></TextField>}
+                        ></DatePicker>
+                    </LocalizationProvider>
                     </Grid>
+  
                     <Grid item xs={4} style={{display: 'flex', flexDirection: 'column', alignContent: 'center'}}>
                     <Button
                         component="label"
@@ -223,3 +187,19 @@ export function AddListing() {
         </div>
     )
 }
+
+// Drop down input example code
+{/* <Grid item xs={4} style={{display: 'flex', flexDirection: 'column', alignContent: 'center'}}>
+<TextField
+    required
+    fullWidth
+    variant='outlined'
+    select
+    value={DeliveryType}
+    onChange={(e) => setDeliveryType(e.target.value)}
+    label="Delivery Type"
+>
+    <MenuItem value={'physical'}>Physical</MenuItem>
+    <MenuItem value={'online'}>Online</MenuItem>
+</TextField>
+</Grid> */}
