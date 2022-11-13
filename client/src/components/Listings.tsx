@@ -40,8 +40,8 @@ export function Listings() {
     //set up functional states. 
     //initial empty list of deals.
     const [dealList, setDealList] = useState<dealList[]>([])
-    const [likes, setLikes] = useState<number[]>([])
-    const [dislikes, setDislikes] = useState<number[]>([])
+    const [voteUp, setVoteUp] = useState<number[]>([])
+    const [voteDown, setVoteDown] = useState<number[]>([])
     // 1. get the listings that are active (ie not expired)
     // 2. (1st promise) iterate over each listing using it's deal_id
     // 3. (2nd promise - nested) fetch the image for the listing.
@@ -83,20 +83,29 @@ export function Listings() {
     }
 
     const handleLikes = (deal_id: number) => {
-        setLikes(likes.concat(deal_id))
-        
+        // check if item is already liked. if not liked yet, add to vote up list
+        const search_index = voteUp.indexOf(deal_id)
+        if (search_index == -1) {
+            const new_voteUp = [...voteUp, deal_id]
+            setVoteUp(new_voteUp)
+     
+        } else if (search_index !== -1) {
+        // if this item has already been liked then on button click this should unlike the item, so we remove from vote up list
+            const new_voteUp = voteUp.filter((elm) => elm !== deal_id)
+            setVoteUp(new_voteUp)
+
+        }
     }
 
     const handleDislikes = (deal_id: number) => {
-        setDislikes(dislikes.concat(deal_id))
-    }
+        setVoteDown(voteDown.concat(deal_id))
+    } 
     
     return (
         <div>
             <h1 className="title">Home</h1>
             <Grid container spacing={4} alignItems="stretch" padding="20px">
                 {dealList.map((listObj, index) => {
-                    console.log(dealList)
                     //format date
                     const starts = new Date(listObj.starts).toLocaleDateString()
                     const ends = new Date(listObj.ends).toLocaleDateString()
@@ -130,13 +139,13 @@ export function Listings() {
                             </CardActionArea>
                             <CardActions>
                                 <IconButton onClick={() => handleLikes(listObj.deal_id)}>
-                                    {likes.includes(listObj.deal_id) ?  <ThumbUpIcon></ThumbUpIcon> : <ThumbUpOffAltIcon></ThumbUpOffAltIcon>}
+                                    {voteUp.includes(listObj.deal_id) ?  <ThumbUpIcon></ThumbUpIcon> : <ThumbUpOffAltIcon></ThumbUpOffAltIcon>}
                                 </IconButton>
                                 <Typography>
                                     {listObj.vote_up}
                                 </Typography>
                                 <IconButton onClick={() => handleDislikes(listObj.deal_id)}>
-                                    {dislikes.includes(listObj.deal_id) ?  <ThumbDownIcon></ThumbDownIcon> : <ThumbDownOffAltIcon></ThumbDownOffAltIcon>}
+                                    {voteDown.includes(listObj.deal_id) ?  <ThumbDownIcon></ThumbDownIcon> : <ThumbDownOffAltIcon></ThumbDownOffAltIcon>}
                                 </IconButton>                                
                                 <Typography>
                                     {listObj.vote_down}
