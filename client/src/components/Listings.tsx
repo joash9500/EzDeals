@@ -82,24 +82,30 @@ export function Listings() {
         }})
     }
 
-    const handleLikes = (deal_id: number) => {
+    const handleLikes = (deal_id: number, index: number) => {
         // check if item is already liked. if not liked yet, add to vote up list
         const search_index = voteUp.indexOf(deal_id)
-        if (search_index == -1) {
+        if (search_index === -1) {
             const new_voteUp = [...voteUp, deal_id]
             setVoteUp(new_voteUp)
-     
+            //update listObj vote count using the index value
+            dealList[index].vote_up += 1
+            setDealList([...dealList])
+
         } else if (search_index !== -1) {
         // if this item has already been liked then on button click this should unlike the item, so we remove from vote up list
             const new_voteUp = voteUp.filter((elm) => elm !== deal_id)
             setVoteUp(new_voteUp)
-
+            dealList[index].vote_up -= 1
+            setDealList([...dealList])
         }
     }
 
     const handleDislikes = (deal_id: number) => {
         setVoteDown(voteDown.concat(deal_id))
     } 
+
+    console.log(dealList)
     
     return (
         <div>
@@ -138,7 +144,7 @@ export function Listings() {
                             </CardContent>
                             </CardActionArea>
                             <CardActions>
-                                <IconButton onClick={() => handleLikes(listObj.deal_id)}>
+                                <IconButton onClick={() => handleLikes(listObj.deal_id, index)}>
                                     {voteUp.includes(listObj.deal_id) ?  <ThumbUpIcon></ThumbUpIcon> : <ThumbUpOffAltIcon></ThumbUpOffAltIcon>}
                                 </IconButton>
                                 <Typography>
