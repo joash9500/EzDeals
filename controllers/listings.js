@@ -47,10 +47,8 @@ router.post('/:users_id/add', (req, res) => {
     const url_link = req.body.url_link
     const start_date = req.body.start_date
     const end_date = req.body.end_date
-
     //get user id from the request url
     const uid = req.params.users_id
-
     //this INSERT will return the id!
     const sql = 'INSERT INTO deal (title, summary, url_link, added, starts, ends, vote_up, vote_down, users_id) VALUES ($1, $2, $3, CURRENT_DATE, $4, $5, 0, 0, $6) RETURNING deal_id'
 
@@ -64,6 +62,26 @@ router.post('/:users_id/add', (req, res) => {
             res.status(500).json({msg: 'error occured when adding new listing to deal table', err})
         })
     }
+})
+
+router.put('/voteup', (req, res) => {
+    console.log('update upvotes', req.body.deal_id)
+    const sql = 'UPDATE deal SET vote_up = $1 WHERE deal_id = $2'
+    db.query(sql, [req.body.vote_up, req.body.deal_id]).then((dbRes) => {
+        res.json({msg: 'success. upvotes have been updated', database: dbRes})
+    }).catch((err) => {
+        res.status(500).json({msg: 'error when updating upvotes in database', err})
+    })
+})
+
+router.put('/votedown', (req, res) => {
+    console.log('update downvotes', req.body)
+    const sql = 'UPDATE deal SET vote_down = $1 WHERE deal_id = $2'
+    db.query(sql, [req.body.vote_down, req.body.deal_id]).then((dbRes) => {
+        res.json({msg: 'success. upvotes have been updated'})
+    }).catch((err) => {
+        res.status(500).json({msg: 'error when updating upvotes in database', err})
+    })
 })
 
 module.exports = router

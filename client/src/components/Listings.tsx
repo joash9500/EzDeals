@@ -55,11 +55,7 @@ export function Listings() {
             const promisesWithImgURL = listingData.map((listingObj) => {
                 let id = listingObj.deal_id
                 return (
-                    axios.get<URLData>('/api/images', {
-                            params: {
-                                deal_id: id
-                            }
-                        })
+                    axios.get<URLData>('/api/images', {params: {deal_id: id} })
                 )
             }) 
 
@@ -82,7 +78,7 @@ export function Listings() {
         }})
     }
 
-    const handleLikes = (deal_id: number, index: number) => {
+    const handleLikes = (deal_id: number, vote_up: number, index: number) => {
         // check if item is already liked. if not liked yet, add to vote up list
         const search_index = voteUp.indexOf(deal_id)
         if (search_index === -1) {
@@ -91,33 +87,83 @@ export function Listings() {
             setVoteUp(new_voteUp)
             //update listObj vote count using the index value
             dealList[index].vote_up += 1
+            //update front end first - optimistic approach
             setDealList([...dealList])
+
+            //update backend - wait for response. if unsuccessful, return state to original and present a message to user
+            axios.put('/api/listings/voteup', {
+                vote_up: dealList[index].vote_up,
+                deal_id: deal_id
+            }).then((res) => {
+                console.log('updated upvotes',res)
+            }).catch((err) => {
+                //revert changes if unsuccessful
+                dealList[index].vote_up -= 1
+                setDealList([...dealList])
+                console.log('error when updating upvotes', err)
+            })
 
         // if this item has already been liked then on button click this should unlike the item, so we remove from vote up list 
         } else if (search_index !== -1) {
             //create new array with filter, so state updates
             const new_voteUp = voteUp.filter((elm) => elm !== deal_id)
             setVoteUp(new_voteUp)
-            //update listObj vote count using the index value
             dealList[index].vote_up -= 1
             setDealList([...dealList])
+
+            axios.put('/api/listings/voteup', {
+                vote_up: dealList[index].vote_up,
+                deal_id: dealList[index].deal_id
+            }).then((res) => {
+                console.log('updated upvotes',res)
+            }).catch((err) => {
+                //revert changes if unsuccessful
+                dealList[index].vote_up += 1
+                setDealList([...dealList])
+                console.log('error when updating upvotes', err)
+            })
         }
     }
 
-    const handleDislikes = (deal_id: number, index: number) => {
+    const handleDislikes = (deal_id: number, vote_down: number, index: number) => {
                const search_index = voteDown.indexOf(deal_id)
                if (search_index === -1) {
                    const new_voteDown = [...voteDown, deal_id]
                    setVoteDown(new_voteDown)
                    dealList[index].vote_down += 1
                    setDealList([...dealList])
-  
+
+                    axios.put('/api/listings/votedown', {
+                        vote_down: dealList[index].vote_down,
+                        deal_id: dealList[index].deal_id
+                    }).then((res) => {
+                        console.log('updated downvotes',res)
+                    }).catch((err) => {
+                        //revert changes if unsuccessful
+                        dealList[index].vote_down -= 1
+                        setDealList([...dealList])
+                        console.log('error when updating downvotes', err)
+                    })
+                   
                } else if (search_index !== -1) {
                    const new_voteDown = voteDown.filter((elm) => elm !== deal_id)
                    setVoteDown(new_voteDown)
                    dealList[index].vote_down -= 1
                    setDealList([...dealList])
+
+                   axios.put('/api/listings/votedown', {
+                        vote_down: dealList[index].vote_down,
+                        deal_id: dealList[index].deal_id
+                    }).then((res) => {
+                        console.log('updated downvotes',res)
+                    }).catch((err) => {
+                        //revert changes if unsuccessful
+                        dealList[index].vote_down += 1
+                        setDealList([...dealList])
+                        console.log('error when updating downvotes', err)
+                    })
                }
+
     } 
     
     return (
@@ -157,13 +203,13 @@ export function Listings() {
                             </CardContent>
                             </CardActionArea>
                             <CardActions>
-                                <IconButton onClick={() => handleLikes(listObj.deal_id, index)}>
+                                <IconButton onClick={() => handleLikes(listObj.deal_id, listObj.vote_up, index)}>
                                     {voteUp.includes(listObj.deal_id) ?  <ThumbUpIcon></ThumbUpIcon> : <ThumbUpOffAltIcon></ThumbUpOffAltIcon>}
                                 </IconButton>
                                 <Typography>
                                     {listObj.vote_up}
                                 </Typography>
-                                <IconButton onClick={() => handleDislikes(listObj.deal_id, index)}>
+                                <IconButton onClick={() => handleDislikes(listObj.deal_id, listObj.vote_down, index)}>
                                     {voteDown.includes(listObj.deal_id) ?  <ThumbDownIcon></ThumbDownIcon> : <ThumbDownOffAltIcon></ThumbDownOffAltIcon>}
                                 </IconButton>                                
                                 <Typography>
