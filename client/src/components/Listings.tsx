@@ -86,26 +86,39 @@ export function Listings() {
         // check if item is already liked. if not liked yet, add to vote up list
         const search_index = voteUp.indexOf(deal_id)
         if (search_index === -1) {
+            //create new array so state updates
             const new_voteUp = [...voteUp, deal_id]
             setVoteUp(new_voteUp)
             //update listObj vote count using the index value
             dealList[index].vote_up += 1
             setDealList([...dealList])
 
+        // if this item has already been liked then on button click this should unlike the item, so we remove from vote up list 
         } else if (search_index !== -1) {
-        // if this item has already been liked then on button click this should unlike the item, so we remove from vote up list
+            //create new array with filter, so state updates
             const new_voteUp = voteUp.filter((elm) => elm !== deal_id)
             setVoteUp(new_voteUp)
+            //update listObj vote count using the index value
             dealList[index].vote_up -= 1
             setDealList([...dealList])
         }
     }
 
-    const handleDislikes = (deal_id: number) => {
-        setVoteDown(voteDown.concat(deal_id))
+    const handleDislikes = (deal_id: number, index: number) => {
+               const search_index = voteDown.indexOf(deal_id)
+               if (search_index === -1) {
+                   const new_voteDown = [...voteDown, deal_id]
+                   setVoteDown(new_voteDown)
+                   dealList[index].vote_down += 1
+                   setDealList([...dealList])
+  
+               } else if (search_index !== -1) {
+                   const new_voteDown = voteDown.filter((elm) => elm !== deal_id)
+                   setVoteDown(new_voteDown)
+                   dealList[index].vote_down -= 1
+                   setDealList([...dealList])
+               }
     } 
-
-    console.log(dealList)
     
     return (
         <div>
@@ -150,7 +163,7 @@ export function Listings() {
                                 <Typography>
                                     {listObj.vote_up}
                                 </Typography>
-                                <IconButton onClick={() => handleDislikes(listObj.deal_id)}>
+                                <IconButton onClick={() => handleDislikes(listObj.deal_id, index)}>
                                     {voteDown.includes(listObj.deal_id) ?  <ThumbDownIcon></ThumbDownIcon> : <ThumbDownOffAltIcon></ThumbDownOffAltIcon>}
                                 </IconButton>                                
                                 <Typography>
