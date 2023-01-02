@@ -7,7 +7,7 @@ export type session = {
     cookie: object,
     email: string,
     first_name: string,
-    user_id: number | null,
+    users_id: number | null,
     username: string
 }
 
@@ -20,7 +20,7 @@ function ListingItem() {
         cookie: {}, 
         email: '', 
         first_name: '', 
-        user_id: null, 
+        users_id: null, 
         username: ''
     }
 
@@ -29,12 +29,12 @@ function ListingItem() {
     useEffect(()=> {
         axios.get('/api/sessions').then((res) => {
             const session:session = res.data.sessionData
+            console.log(session)
             setSession(session)
         }).catch((err) => {
             //set up error message...
             console.log(err)
         })
-        console.log(session)
     },[])
 
     return (

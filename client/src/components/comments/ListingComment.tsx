@@ -4,9 +4,9 @@ import ListingCommentForm from "./ListingCommentForm"
 
 function ListingComment({comment, replies, session, addComment, deleteComment, updateComment, commentActions, setCommentActions, parent_id}: commentProps) {
     //set up controls for reply, edit and delete
-    const canReply = Boolean(session.user_id)
-    const canEdit = session.user_id === comment.users_id
-    const canDelete = session.user_id === comment.users_id
+    const canReply = Boolean(session.users_id)
+    const canEdit = session.users_id === comment.users_id
+    const canDelete = session.users_id === comment.users_id
     //note parent_id is null or a number. this keeps comments to just 2 levels (for rootcomment and replies)
     const reply_id = parent_id ? parent_id : comment.id
     //format date 

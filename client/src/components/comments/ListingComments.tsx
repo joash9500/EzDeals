@@ -80,8 +80,8 @@ export function ListingComments({itemData, sessionData}: allCommentsProps) {
 
     //when adding a new comment, you're creating a new rootComment that can potentially have children (ie. reply comments)
     const addComment = (text: string, reply_id: number | null) => {
-        if (sessionData.user_id) {
-            const user_id = sessionData.user_id
+        if (sessionData.users_id) {
+            const user_id = sessionData.users_id
             const username = sessionData.username
             const deal_id = itemData.deal_id
             const newCommentData:commentDataNew = {
@@ -172,7 +172,7 @@ export function ListingComments({itemData, sessionData}: allCommentsProps) {
             <h4 className="comment-title">Comments</h4>
             {/* this will be a form to add new comments, so initial text is just an empty string... */}
             {/* setCommentActions to null if not replying or not editing */}
-            {sessionData.user_id ? 
+            {sessionData.users_id ? 
                 <ListingCommentForm 
                     submitHandler={addComment} 
                     submitLabel="Add Comment" 

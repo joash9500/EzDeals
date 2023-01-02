@@ -1,7 +1,7 @@
 //SETUP server
 const express = require("express");
 require('dotenv').config()
-const port = process.env.PORT || 3001; // Note: using a different port to normal '3000'
+const port = process.env.PORT || 8080; // Note: using a different port to normal '3000'
 //SETUP for sessions/cookies
 const expressSession = require('express-session')
 const pgSession = require('connect-pg-simple')(expressSession);
@@ -49,7 +49,7 @@ app.use((err, req, res, next) => {
   next(err)
 })
 
-app.listen(port, () => {
+app.listen(port, '0.0.0.0', () => {
   console.log(`Server is running on port: http://localhost:${port}`);
 });
 

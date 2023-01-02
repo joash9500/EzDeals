@@ -160,7 +160,7 @@ export function Listings() {
                         //revert changes if unsuccessful
                         dealList[index].vote_down += 1
                         setDealList([...dealList])
-                        console.log('error when updating downvotes', err)
+                        console.log('error when upda ting downvotes', err)
                     })
                }
 
