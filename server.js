@@ -49,7 +49,7 @@ app.use((err, req, res, next) => {
   next(err)
 })
 
-app.listen(port, '0.0.0.0', () => {
+app.listen(port, () => {
   console.log(`Server is running on port: http://localhost:${port}`);
 });
 
