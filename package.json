@@ -6,20 +6,20 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
-    "dev": "nodemon server.js"
-
+    "dev": "nodemon server.js",
+    "build": "cd client && yarn && yarn build"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/joash9500/project-4.git"
+    "url": "git+https://github.com/joash9500/EzDeals.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/joash9500/project-4/issues"
+    "url": "https://github.com/joash9500/EzDeals/issues"
   },
-  "homepage": "https://github.com/joash9500/project-4#readme",
+  "homepage": "https://github.com/joash9500/EzDeals#readme",
   "dependencies": {
     "@aws-sdk/client-s3": "^3.142.0",
     "@aws-sdk/s3-request-presigner": "^3.142.0",
